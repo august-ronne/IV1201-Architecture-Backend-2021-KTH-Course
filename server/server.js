@@ -12,8 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 /* API */
-const authAPI = require("./api/routes/dummy");
-// const authAPI = require("./api/routes/authAPI");
+const authAPI = require("./api/routes/authAPI");
 app.use("/", authAPI);
 
 require("./controllers/DBController");
