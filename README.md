@@ -1,19 +1,17 @@
 # iv1201-auth
 
-# iv1201-express-auth-server
+### (1) Clone repo
 
-## Clone repo
+### (2) cd /server
 
-## cd /server
+### (3) npm install
 
-## npm install
-
-## create .env file (in /server directory)
+### (4) create .env file (in /server directory)
   fill .env file with data according to the blueprint .env.example
   
-## Start server by running npm start
+### (4) Start server by running npm start
   
-## Test API using Postman (or other tool)
+### Test API using Postman (or other tool)
   
 ### Register User
     POST http://localhost:<SERVER_PORT>/auth/register
