@@ -10,6 +10,7 @@ function auth(req, res, next) {
         /* Verify token (decoded will be the user._id stored in mongoDB */
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         /* Add user from payload */
+        console.log(decoded);
         req.user = decoded;
         next();
     } catch (error) {
