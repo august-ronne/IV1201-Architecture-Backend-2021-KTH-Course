@@ -4,7 +4,11 @@ const auth = require("../middleware/auth");
 
 const authController = require("../../controllers/AuthController");
 
-router.post("/auth/register", authController.registerAccount);
+router.post("/auth/register", async function(req, res)
+
+
+
+authController.registerAccount);
 router.post("/auth/login", authController.loginAccount);
 router.post("/auth/logout", authController.logoutAccount);
 
