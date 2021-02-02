@@ -1,10 +1,9 @@
 const express = require("express");
-
-const dotenv = require("dotenv");
 const cors = require("cors");
+require("dotenv").config();
+const dbController = require("./controllers/DBController");
 
 const app = express();
-dotenv.config();
 
 /* Middleware */
 app.use(express.urlencoded({ extended: false }));
@@ -15,8 +14,10 @@ app.use(cors());
 const authAPI = require("./api/routes/authAPI");
 app.use("/", authAPI);
 
-require("./controllers/DBController");
+dbController.connectServerToDB(app);
 
-app.listen(process.env.SERVER_PORT, () => {
-    console.log(`Server listening on port ${process.env.SERVER_PORT}`);
+app.on("mongodb_connection_ready", () => {
+    app.listen(process.env.SERVER_PORT, () => {
+        console.log(`Server listening on port ${process.env.SERVER_PORT}`);
+    });
 });
