@@ -11,6 +11,8 @@
 ## create .env file (in /server directory)
   fill .env file with data according to the blueprint .env.example
   
+## Start server by running npm start
+  
 ## Test API using Postman (or other tool)
   
 ### Register User
