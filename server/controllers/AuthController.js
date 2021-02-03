@@ -68,8 +68,24 @@ exports.registerAccount = async ({ firstName, lastName, email, username, passwor
 };
 
 exports.getUser = async ({user}) => {
-
     console.log(" -> AuthController.getUser() triggered");
 
-    return await userDAO.getUserByID(User, user.id);
+    if(user == null || user.uid == null)//if(user?.uid == null)
+        throw {accepted: false, error: "malformed request", code: 400};
+    
+    let result = await userDAO.getUserByID(User, user.uid)
+    
+    return {
+        accepted: true,
+        user: {
+            uid: result._id,
+            firstName: result.firstName,
+            lastName: result.lastName,
+            email: result.email,
+            username: result.username,
+            dateOfBirth: result.dateOfBirth,
+            createdAt: result.createdAt,
+            updatedAt: result.updatedAt
+        }
+    };
 };
