@@ -44,4 +44,15 @@ router.get("/auth/user", auth, async (req, res) => {
     }
 });
 
+router.get("/auth/authenticated", authenticate, async (req, res) => {
+    try {
+        const result = await authController.getUserAuthenticationStatus(req);
+        res.status(200).json({
+            serverMessage: result,
+        });
+    } catch (error) {
+        errorHandler.sendError(error, res);
+    }
+});
+
 module.exports = router;
