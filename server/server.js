@@ -5,6 +5,9 @@ const dbController = require("./controllers/DBController");
 
 const app = express();
 
+console.log(process.env.DB_CONNECT)
+console.log(process.env.PORT)
+
 /* Middleware */
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
