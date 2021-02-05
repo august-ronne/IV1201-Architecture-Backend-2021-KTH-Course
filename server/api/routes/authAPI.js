@@ -47,12 +47,12 @@ router.post("/auth/login", async (req, res) => {
             sameSite: true,
         });
         res.status(200).json({
+            isAuthenticated: true,
+            user,
             serverMessage: {
                 isError: false,
                 accepted: true,
                 msgBody: "Successfully logged in",
-                isAuthenticated: true,
-                user,
             },
         });
     } catch (error) {
@@ -63,15 +63,15 @@ router.post("/auth/login", async (req, res) => {
 router.get("/auth/logout", authenticate, (req, res) => {
     res.clearCookie("access_token");
     res.status(200).json({
+        user: {
+            uid: "",
+            firstName: "",
+            email: "",
+        },
         serverMessage: {
             isError: false,
             accepted: true,
             msgBody: "Successfully logged out",
-            user: {
-                uid: "",
-                firstName: "",
-                email: "",
-            },
         },
     });
 });
@@ -80,8 +80,13 @@ router.get("/auth/logout", authenticate, (req, res) => {
 router.get("/auth/user", authenticate, async (req, res) => {
     try {
         const result = await authController.getUser(req);
+        const { user, isAuthenticated, ...rest } = result;
+        console.log(user);
+        console.log(isAuthenticated);
         res.status(200).json({
-            serverMessage: result,
+            isAuthenticated,
+            user,
+            serverMessage: rest,
         });
     } catch (error) {
         errorHandler.sendError(error, res);
@@ -89,14 +94,20 @@ router.get("/auth/user", authenticate, async (req, res) => {
 });
 
 router.get("/auth/authenticated", authenticate, async (req, res) => {
+    console.log("API authenticate");
     try {
-        const result = await authController.getUserAuthenticationStatus(req);
+        const result = await authController.checkUserAuthenticationStatus(req);
+        const { user, isAuthenticated, ...rest } = result;
+        console.log(user);
+        console.log(isAuthenticated);
         res.status(200).json({
-            serverMessage: result,
+            isAuthenticated,
+            user,
+            serverMessage: rest,
         });
     } catch (error) {
         errorHandler.sendError(error, res);
     }
-})
+});
 
 module.exports = router;

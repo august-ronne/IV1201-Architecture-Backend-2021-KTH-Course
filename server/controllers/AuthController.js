@@ -28,7 +28,7 @@ exports.loginAccount = async ({ email, password }) => {
             isError: true,
             accepted: false,
             error: "Invalid credentials",
-            code: 400,
+            code: 401,
         };
     const token = tokenHandler.generateToken(foundUser._id);
     return {
@@ -113,7 +113,7 @@ exports.getUser = async ({ user }) => {
 };
 
 exports.checkUserAuthenticationStatus = async ({ user }) => {
-    console.log(" -> AuthController.getUser() triggered");
+    console.log(" -> AuthController.checkUserAuthenticationStatus() triggered");
 
     if (user == null || user.id == null) {
         throw {

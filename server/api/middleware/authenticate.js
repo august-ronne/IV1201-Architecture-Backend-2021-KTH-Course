@@ -27,7 +27,7 @@ function authenticate(req, res, next) {
                 isError: true,
                 accepted: false,
                 msgBody: "Token is not valid",
-                code: 400,
+                code: 401,
             },
             res
         );
