@@ -1,14 +1,16 @@
 exports.sendError = (error, res) => {
     if (error.code) {
         res.status(error.code).json({
-            msg: "from /api/error/errorHandler.js",
-            error,
+            serverMessage: error,
         });
     } else {
         res.status(500).json({
-            msg: "Server error (/api/error/errorHandler.js)",
-            accepted: false,
-            error,
+            serverMessage: {
+                isError: true,
+                accepted: false,
+                msgBody: "Error when querying database",
+                code: 500,
+            },
         });
     }
 };
