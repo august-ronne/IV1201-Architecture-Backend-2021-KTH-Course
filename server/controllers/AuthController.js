@@ -111,3 +111,28 @@ exports.getUser = async ({ user }) => {
         },
     };
 };
+
+exports.checkUserAuthenticationStatus = async ({ user }) => {
+    console.log(" -> AuthController.getUser() triggered");
+
+    if (user == null || user.id == null) {
+        throw {
+            isError: true,
+            accepted: false,
+            msgBody: "Malformed user information",
+            code: 400,
+        };
+    }
+    const result = await userDAO.getUserByID(User, user.id);
+    return {
+        isError: false,
+        accepted: true,
+        msgBody: "This user is logged in",
+        isAuthenticated: true,
+        user: {
+            uid: result._id,
+            firstName: result.firstName,
+            email: result.email,
+        },
+    };
+};

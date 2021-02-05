@@ -79,7 +79,7 @@ router.get("/auth/logout", authenticate, (req, res) => {
 /* Protected route, second arg 'auth' is the middleware imported at top */
 router.get("/auth/user", authenticate, async (req, res) => {
     try {
-        let result = await authController.getUser(req);
+        const result = await authController.getUser(req);
         res.status(200).json({
             serverMessage: result,
         });
@@ -87,5 +87,16 @@ router.get("/auth/user", authenticate, async (req, res) => {
         errorHandler.sendError(error, res);
     }
 });
+
+router.get("/auth/authenticated", authenticate, async (req, res) => {
+    try {
+        const result = await authController.getUserAuthenticationStatus(req);
+        res.status(200).json({
+            serverMessage: result,
+        });
+    } catch (error) {
+        errorHandler.sendError(error, res);
+    }
+})
 
 module.exports = router;
