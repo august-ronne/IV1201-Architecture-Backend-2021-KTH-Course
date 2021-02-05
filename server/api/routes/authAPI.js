@@ -44,7 +44,7 @@ router.get("/auth/user", auth, async (req, res) => {
     }
 });
 
-router.get("/auth/authenticated", authenticate, async (req, res) => {
+router.get("/auth/authenticated", auth, async (req, res) => {
     try {
         const result = await authController.getUserAuthenticationStatus(req);
         res.status(200).json({
