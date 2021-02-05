@@ -12,7 +12,7 @@ const userDAO = require("../integration/userDAO");
 exports.logoutAccount = async () => {};
 
 exports.loginAccount = async ({ email, password }) => {
-    console.log(" -> AuthController.loginAccount() triggered");
+    console.log(" AuthController.loginAccount() triggered");
 
     const foundUser = await userDAO.findUserByEmail(User, email);
     if (!foundUser)
@@ -51,7 +51,7 @@ exports.registerAccount = async ({
     username,
     password,
 }) => {
-    console.log(" -> AuthController.registerAccount() triggered");
+    console.log(" AuthController.registerAccount() triggered");
 
     const foundUser = await userDAO.findUserByEmail(User, email);
     if (foundUser)
@@ -84,7 +84,7 @@ exports.registerAccount = async ({
 };
 
 exports.getUser = async ({ user }) => {
-    console.log(" -> AuthController.getUser() triggered");
+    console.log(" AuthController.getUser() triggered");
 
     if (user == null || user.id == null) {
         throw {
@@ -113,7 +113,7 @@ exports.getUser = async ({ user }) => {
 };
 
 exports.checkUserAuthenticationStatus = async ({ user }) => {
-    console.log(" -> AuthController.checkUserAuthenticationStatus() triggered");
+    console.log(" AuthController.checkUserAuthenticationStatus() triggered");
 
     if (user == null || user.id == null) {
         throw {

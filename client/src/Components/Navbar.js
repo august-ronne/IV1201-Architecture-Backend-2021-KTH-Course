@@ -39,8 +39,8 @@ const Navbar = (props) => {
                 <Link to="/">
                     <li>Home</li>
                 </Link>
-                <Link to="/todos">
-                    <li>Page for logged in users</li>
+                <Link to="/usersonly">
+                    <li>Secret page for logged in users!</li>
                 </Link>
                 <button
                     type="button"

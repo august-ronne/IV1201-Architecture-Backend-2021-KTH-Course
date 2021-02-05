@@ -3,20 +3,10 @@ const jwt = require("jsonwebtoken");
 const errorHandler = require("../error/errorHandler");
 
 function authenticate(req, res, next) {
+    console.log(" (api/middleware) authenticate.authenticate() triggered)");
     try {
         const token = req.cookies["access_token"];
-        /* Check for token */
-        if (!token) {
-            errorHandler.sendError(
-                {
-                    isError: true,
-                    accepted: false,
-                    msgBody: "No token, not authorized",
-                    code: 401,
-                },
-                res
-            );
-        }
+        if (!token) res.status(401);
         /* Verify token (decoded will be the user._id stored in mongoDB */
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
