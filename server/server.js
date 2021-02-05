@@ -21,6 +21,6 @@ dbController.connectServerToDB(app);
 
 app.on("mongodb_connection_ready", () => {
     app.listen(process.env.PORT || 5000, () => {
-        console.log(`Server listening on port ${process.env.SERVER_PORT}`);
+        console.log(`Server listening on port ${process.env.PORT}`);
     });
 });
