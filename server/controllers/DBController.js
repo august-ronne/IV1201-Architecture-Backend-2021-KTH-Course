@@ -14,9 +14,8 @@ exports.connectServerToDB = (app) => {
 
 
 let dbStatus = false;
+
 exports.jestDB = () => {
-    
-    
     let callback;
     let promise = new Promise((resolve, reject) => {
         callback = () => {resolve(); dbStatus = true};
