@@ -60,7 +60,8 @@ router.post("/auth/login", async (req, res) => {
     }
 });
 
-router.get("/auth/logout", authenticate, (req, res) => {
+router.get("/auth/logout", (req, res) => {
+    console.log("API logout");
     res.clearCookie("access_token");
     res.status(200).json({
         user: {

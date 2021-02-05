@@ -10,7 +10,7 @@ const Navbar = (props) => {
 
     const onClickLogoutHandler = () => {
         AuthService.logout().then((data) => {
-            if (data.success) {
+            if (data.serverMessage.accepted) {
                 setUser(data.user);
                 setIsAuthenticated(false);
             }
