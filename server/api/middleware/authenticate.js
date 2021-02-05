@@ -2,6 +2,17 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const errorHandler = require("../error/errorHandler");
 
+/**
+ * Middleware function verifying jwt token attached in cookie.
+ * 
+ * @param req Request object
+ * @param res Response object
+ * @param next Next function in chain
+ * 
+ * returns 401: If no token present or if token not valid.
+ * 
+ * Otherwise calls next function.
+ */
 function authenticate(req, res, next) {
     try {
         const token = req.cookies["access_token"];
