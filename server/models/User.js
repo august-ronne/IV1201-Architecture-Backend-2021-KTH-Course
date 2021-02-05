@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
-/* Date of birth uses a static value until decision on front-end form design has been made */
+/**
+ * Mongoose schema representing a user to be stored in the database.
+ */
 const userSchema = new mongoose.Schema(
     {
         firstName: {
