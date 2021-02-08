@@ -140,7 +140,7 @@ router.get("/auth/user", authenticate, async (req, res) => {
 });
 
 /**
- * Route for querying user if authenticated.
+ * Route for querying user to see if authenticated.
  * 
  * @param {String} endpoint url endpoint.
  * @param authenticate middleware handling authentication.
