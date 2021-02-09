@@ -152,12 +152,24 @@ router.get("/auth/user", authenticate, async (req, res) => {
  */
 
 router.get("/auth/authenticated", authenticate, async (req, res) => {
-    console.log("API authenticate");
+    console.log(" (api/routes) GET /auth/authenticated triggered");
+    if (res.status === 401) {
+        errorHandler.sendError({
+            user: {
+                uid: "",
+                firstName: "",
+                email: "",
+            },
+            serverMessage: {
+                isError: false,
+                accepted: true,
+                msgBody: "Client user is not logged in",
+            },
+        })
+    }
     try {
         const result = await authController.checkUserAuthenticationStatus(req);
         const { user, isAuthenticated, ...rest } = result;
-        console.log(user);
-        console.log(isAuthenticated);
         res.status(200).json({
             isAuthenticated,
             user,
