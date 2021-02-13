@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --testEnvironment=node --verbose --forceExit --watchAll --maxWorkers=1",
     "start": "cd server && node server.js",
     "dev": "cd server && nodemon server.js"
   },
@@ -20,5 +20,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.13",
     "nodemon": "^2.0.7"
+  },
+  "devDependencies": {
+    "supertest": "^6.1.3"
   }
 }

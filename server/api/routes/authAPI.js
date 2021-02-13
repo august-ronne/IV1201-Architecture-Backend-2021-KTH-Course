@@ -127,8 +127,8 @@ router.get("/auth/user", authenticate, async (req, res) => {
     try {
         const result = await authController.getUser(req);
         const { user, isAuthenticated, ...rest } = result;
-        console.log(user);
-        console.log(isAuthenticated);
+        // console.log(user);
+        // console.log(isAuthenticated);
         res.status(200).json({
             isAuthenticated,
             user,

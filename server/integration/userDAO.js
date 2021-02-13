@@ -35,3 +35,17 @@ exports.getUserByID = async (mongoDatabase, userID) => {
     console.log(" -> userDAO.getUserByID() triggered");
     return await mongoDatabase.findById(userID).select("-password");
 }
+
+
+/**
+ * Integration function which deletes a user based on the supplied id.
+ * 
+ * @param  mongoDatabase Mongoose model object
+ * @param  userID UserId of user to be deleted
+ * 
+ * @return Deleted user
+ */
+exports.getUserByIDAndDelete = async (mongoDatabase, userID) => {
+    console.log(" -> userDAO.getUserByIDAndDelete() triggered");
+    return await mongoDatabase.findByIdAndRemove(userID);
+}
