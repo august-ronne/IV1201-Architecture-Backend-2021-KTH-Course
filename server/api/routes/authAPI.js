@@ -5,6 +5,17 @@ const authenticate = require("../middleware/authenticate");
 const authController = require("../../controllers/AuthController");
 const errorHandler = require("../error/errorHandler");
 
+/**
+ * Route for user registration.
+ * 
+ * @param {String} endpoint url endpoint.
+ * @param req Express request object.
+ * @param res Express response object.
+ * 
+ * return 201: User got registered correctly.
+ * return 400: Necessary information is not supplied.
+ * return 500: Database error.
+ */
 router.post("/auth/register", async (req, res) => {
     console.log(" (api/routes) POST /auth/registered triggered");
     let { firstName, lastName, email, username, password } = req.body;
@@ -26,6 +37,19 @@ router.post("/auth/register", async (req, res) => {
         errorHandler.sendError(error, res);
     }
 });
+
+/**
+ * Route for user login.
+ * 
+ * @param {String} endpoint url endpoint.
+ * @param req Express request object.
+ * @param res Express request object.
+ * 
+ * return 200: User login succesful.
+ * return 400: Missing credentials for login.
+ * return 500: Database error.
+ * 
+ */
 
 router.post("/auth/login", async (req, res) => {
     console.log(" (api/routes) POST /auth/login triggered");
@@ -58,9 +82,20 @@ router.post("/auth/login", async (req, res) => {
             },
         });
     } catch (error) {
-        errorHandler.sendError(e, res);
+        errorHandler.sendError(error, res);
     }
 });
+
+/**
+ * Route for user logout.
+ * Clears cookie handling session.
+ * 
+ * @param {String} endpoint url endpoint.
+ * @param req Express request object.
+ * @param res Express request object.
+ * 
+ * return 200: User logout succesful.
+ */
 
 router.get("/auth/logout", (req, res) => {
     console.log(" (api/routes) GET /auth/logout triggered");
@@ -79,7 +114,17 @@ router.get("/auth/logout", (req, res) => {
     });
 });
 
-/* Protected route, second arg 'auth' is the middleware imported at top */
+/**
+ * Route for querying user from database.
+ * 
+ * @param {String} endpoint url endpoint.
+ * @param authenticate middleware handling authentication.
+ * @param req Express request object.
+ * @param res Express request object.
+ * 
+ * return 200: User succesfully queried from database.
+ * return 500: Database error.
+ */
 router.get("/auth/user", authenticate, async (req, res) => {
     console.log(" (api/routes) GET /auth/user triggered");
     try {
@@ -96,6 +141,18 @@ router.get("/auth/user", authenticate, async (req, res) => {
         errorHandler.sendError(error, res);
     }
 });
+
+/**
+ * Route for querying user to see if authenticated.
+ * 
+ * @param {String} endpoint url endpoint.
+ * @param authenticate middleware handling authentication.
+ * @param req Express request object.
+ * @param res Express request object.
+ * 
+ * return 200: User authenticated.
+ * return 500: Database error.
+ */
 
 router.get("/auth/authenticated", authenticate, async (req, res) => {
     console.log(" (api/routes) GET /auth/authenticated triggered");
