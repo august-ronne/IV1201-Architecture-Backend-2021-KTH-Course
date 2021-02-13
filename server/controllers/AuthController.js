@@ -23,14 +23,14 @@ exports.logoutAccount = async () => {};
  * @throws 401 error: If a eligible user enters wrong credentials 
  */
 exports.loginAccount = async ({ email, password }) => {
-    console.log(" -> AuthController.loginAccount() triggered");
+    console.log(" AuthController.loginAccount() triggered");
 
     const foundUser = await userDAO.findUserByEmail(User, email);
     if (!foundUser)
         throw {
             isError: true,
             accepted: false,
-            error: "This email does not belong to a registered account",
+            msgBody: "This email does not belong to a registered account",
             code: 400,
         };
     const correctPassword = hasher.compare(foundUser.password, password);
@@ -38,7 +38,7 @@ exports.loginAccount = async ({ email, password }) => {
         throw {
             isError: true,
             accepted: false,
-            error: "Invalid credentials",
+            msgBody: "Invalid credentials",
             code: 401,
         };
     const token = tokenHandler.generateToken(foundUser._id);
@@ -72,7 +72,7 @@ exports.registerAccount = async ({
     username,
     password,
 }) => {
-    console.log(" -> AuthController.registerAccount() triggered");
+    console.log(" AuthController.registerAccount() triggered");
 
     const foundUser = await userDAO.findUserByEmail(User, email);
     if (foundUser)
@@ -113,7 +113,7 @@ exports.registerAccount = async ({
  * @throws 400 error: If query is malformed.
  */
 exports.getUser = async ({ user }) => {
-    console.log(" -> AuthController.getUser() triggered");
+    console.log(" AuthController.getUser() triggered");
 
     if (user == null || user.id == null) {
         throw {
@@ -152,7 +152,7 @@ exports.getUser = async ({ user }) => {
  * @throws 400 error: If request is malformed.
  */
 exports.checkUserAuthenticationStatus = async ({ user }) => {
-    console.log(" -> AuthController.checkUserAuthenticationStatus() triggered");
+    console.log(" AuthController.checkUserAuthenticationStatus() triggered");
 
     if (user == null || user.id == null) {
         throw {
