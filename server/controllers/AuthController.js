@@ -30,7 +30,7 @@ exports.loginAccount = async ({ email, password }) => {
         throw {
             isError: true,
             accepted: false,
-            error: "This email does not belong to a registered account",
+            msgBody: "This email does not belong to a registered account",
             code: 400,
         };
     const correctPassword = hasher.compare(foundUser.password, password);
@@ -38,7 +38,7 @@ exports.loginAccount = async ({ email, password }) => {
         throw {
             isError: true,
             accepted: false,
-            error: "Invalid credentials",
+            msgBody: "Invalid credentials",
             code: 401,
         };
     const token = tokenHandler.generateToken(foundUser._id);

@@ -80,7 +80,7 @@ router.post("/auth/login", async (req, res) => {
             },
         });
     } catch (error) {
-        errorHandler.sendError(e, res);
+        errorHandler.sendError(error, res);
     }
 });
 
