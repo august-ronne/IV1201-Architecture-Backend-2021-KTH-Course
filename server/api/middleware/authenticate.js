@@ -14,6 +14,7 @@ const errorHandler = require("../error/errorHandler");
  * Otherwise calls next function.
  */
 function authenticate(req, res, next) {
+    console.log(" (api/middleware) authenticate.authenticate() triggered)");
     try {
         const token = req.cookies["access_token"];
         if (!token) res.status(401);
