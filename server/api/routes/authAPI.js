@@ -24,8 +24,9 @@ const {
  * @return 500: Database error.
  */
 router.post("/auth/register", async (req, res) => {
-    console.log(" (api/routes) POST /auth/registered triggered");
+    console.log(" (api/routes) POST /auth/register triggered");
     try {
+        delete req.body.confirmPassword;
         const validatedRequest = await registerValidationSchema.validateAsync(
             req.body
         );
@@ -33,6 +34,7 @@ router.post("/auth/register", async (req, res) => {
         responseHandler.sendResponse(result, res);
     } catch (error) {
         if (isValidationError(error)) {
+            console.log(error);
             responseHandler.sendResponse(
                 {
                     isError: true,
@@ -142,6 +144,7 @@ router.get("/auth/userstatus", async (req, res) => {
                     isError: false,
                     msgBody: "This user is not logged in",
                     code: 200,
+                    isAuthenticated: false,
                     user: {
                         uid: "",
                         firstName: "",
@@ -165,6 +168,7 @@ router.get("/auth/userstatus", async (req, res) => {
                     isError: true,
                     msgBody: "User has supplied an invalid token",
                     code: 400,
+                    isAuthenticated: false,
                     user: {
                         uid: "",
                         firstName: "",
