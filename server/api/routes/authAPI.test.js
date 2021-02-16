@@ -1,6 +1,7 @@
 const appModule = require('../../server')
 const {registerAccount, loginAccount, getUser, logoutAccount, deleteAccount, checkUserAuthenticationStatus} = require("../../controllers/AuthController");
 const User = require("../../models/User");
+const dbController = require("../../controllers/DBController");
 const userDAO = require("../../integration/userDAO");
 const request = require('supertest');
 const mongoose = require("mongoose");
@@ -10,15 +11,15 @@ const mongoose = require("mongoose");
 const app = appModule.app;
 
 beforeAll(async () => {
-    // return await dbController.jestDB();
-    mongoose.connect(process.env.DB_CONNECT, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-    });
-    mongoose.connection.once("open", () => {
-        // app.emit("mongodb_connection_ready");
-        console.log("Server connected to MongoDB Atlas");
-    });
+    return await dbController.jestDB();
+    // mongoose.connect(process.env.DB_CONNECT, {
+    //     useUnifiedTopology: true,
+    //     useNewUrlParser: true,
+    // });
+    // mongoose.connection.once("open", () => {
+    //     // app.emit("mongodb_connection_ready");
+    //     console.log("Server connected to MongoDB Atlas");
+    // });
 
 });
 
@@ -51,7 +52,7 @@ describe('POST Endpoints', () => {
         
         })
 
-        expect(res.statusCode).toBe(200)
+        expect(res.statusCode).toBe(201)
     })
 })
 

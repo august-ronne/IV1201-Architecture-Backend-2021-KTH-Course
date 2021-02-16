@@ -12,15 +12,15 @@ const account_new = { firstName: "jest", lastName: "test", email: "jest.test1@ma
 
 
 beforeAll(async () => {
-    // return await dbController.jestDB();
-    mongoose.connect(process.env.DB_CONNECT, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-    });
-    mongoose.connection.once("open", () => {
-        // app.emit("mongodb_connection_ready");
-        console.log("Server connected to MongoDB Atlas");
-    });
+    return await dbController.jestDB();
+    // mongoose.connect(process.env.DB_CONNECT, {
+    //     useUnifiedTopology: true,
+    //     useNewUrlParser: true,
+    // });
+    // mongoose.connection.once("open", () => {
+    //     // app.emit("mongodb_connection_ready");
+    //     console.log("Server connected to MongoDB Atlas");
+    // });
 
 });
 
@@ -56,7 +56,7 @@ describe('Login', () => {
         catch(e) {
             expect(e).toStrictEqual({accepted: false, 
                                     code: 400,
-                                    error: "This email does not belong to a registered account",
+                                    msgBody: "This email does not belong to a registered account",
                                     isError: true});
         }
     });
