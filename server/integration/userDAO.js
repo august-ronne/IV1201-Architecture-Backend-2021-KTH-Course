@@ -4,6 +4,7 @@
  * @param user User object to be saved in database.
  * 
  * @return Returns stored user.
+ * @throws 500 error: Internal server error caused by server <-> db communication
  */
 exports.addNewUser = async (user) => {
     console.log(" userDAO.addNewUser() triggered")
@@ -17,6 +18,7 @@ exports.addNewUser = async (user) => {
  * @param email Email that is searched for in the database.
  * 
  * @return Returns stored user.
+ * @throws 500 error: Internal server error caused by server <-> db communication
  */
 exports.findUserByEmail = async (mongoDatabase, email) => {
     console.log(" userDAO.findUserByEmail() triggered")
@@ -30,6 +32,7 @@ exports.findUserByEmail = async (mongoDatabase, email) => {
  * @param userID UserId that is being queried for in the database.
  * 
  * @return Returns stored user.
+ * @throws 500 error: Internal server error caused by server <-> db communication
  */
 exports.getUserByID = async (mongoDatabase, userID) => {
     console.log(" userDAO.getUserByID() triggered");

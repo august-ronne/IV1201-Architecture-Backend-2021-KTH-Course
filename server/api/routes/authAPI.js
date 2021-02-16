@@ -1,127 +1,195 @@
 const express = require("express");
 const router = express.Router();
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 const authenticate = require("../middleware/authenticate");
 const authController = require("../../controllers/AuthController");
-const errorHandler = require("../error/errorHandler");
+const responseHandler = require("../serverResponses/responseHandler");
+const {
+    registerValidationSchema,
+    loginValidationSchema,
+    isValidationError,
+} = require("../../utils/validation");
 
 /**
  * Route for user registration.
- * 
+ *
  * @param {String} endpoint url endpoint.
  * @param req Express request object.
  * @param res Express response object.
- * 
- * return 201: User got registered correctly.
- * return 400: Necessary information is not supplied.
- * return 500: Database error.
+ *
+ * @return 201: User got registered correctly.
+ * @return 400: Necessary information is not supplied.
+ * @return 500: Database error.
  */
 router.post("/auth/register", async (req, res) => {
-    console.log(" (api/routes) POST /auth/registered triggered");
-    let { firstName, lastName, email, username, password } = req.body;
-    if (!firstName || !lastName || !email || !username || !password) {
-        errorHandler.sendError(
-            {
-                isError: true,
-                accepted: false,
-                msgBody: "Credentials missing",
-                code: 400,
-            },
-            res
-        );
-    }
+    console.log(" (api/routes) POST /auth/register triggered");
     try {
-        let result = await authController.registerAccount(req.body);
-        res.status(201).json({ serverMessage: result });
+        delete req.body.confirmPassword;
+        const validatedRequest = await registerValidationSchema.validateAsync(
+            req.body
+        );
+        const result = await authController.registerAccount(validatedRequest);
+        responseHandler.sendResponse(result, res);
     } catch (error) {
-        errorHandler.sendError(error, res);
+        if (isValidationError(error)) {
+            console.log(error);
+            responseHandler.sendResponse(
+                {
+                    isError: true,
+                    msgBody:
+                        "Bad request (either missing fields or faulty values)",
+                    code: 400,
+                },
+                res
+            );
+        } else {
+            responseHandler.sendResponse(error, res);
+        }
     }
 });
 
 /**
  * Route for user login.
- * 
+ *
  * @param {String} endpoint url endpoint.
  * @param req Express request object.
  * @param res Express request object.
- * 
- * return 200: User login succesful.
- * return 400: Missing credentials for login.
- * return 500: Database error.
- * 
+ *
+ * @return 200: User login succesful.
+ * @return 400: Missing credentials for login.
+ * @return 500: Database error.
+ *
  */
-
 router.post("/auth/login", async (req, res) => {
     console.log(" (api/routes) POST /auth/login triggered");
-    let { email, password } = req.body;
-    if (!email || !password) {
-        errorHandler.sendError(
-            {
-                isError: true,
-                accepted: false,
-                msgBody: "Credentials missing",
-                code: 400,
-            },
-            res
-        );
-    }
+
     try {
-        const result = await authController.loginAccount(req.body);
-        const { token, user } = result;
+        const validatedRequest = await loginValidationSchema.validateAsync(
+            req.body
+        );
+        const result = await authController.loginAccount(validatedRequest);
+        const { token } = result;
         res.cookie("access_token", token, {
             httpOnly: true,
             sameSite: true,
         });
-        res.status(200).json({
-            isAuthenticated: true,
-            user,
-            serverMessage: {
-                isError: false,
-                accepted: true,
-                msgBody: "Successfully logged in",
-            },
-        });
+        responseHandler.sendResponse(result, res);
     } catch (error) {
-        errorHandler.sendError(error, res);
+        if (isValidationError(error)) {
+            errorHandler.sendError(
+                {
+                    isError: true,
+                    accepted: false,
+                    msgBody:
+                        "Bad request (either missing fields or faulty values)",
+                    code: 400,
+                },
+                res
+            );
+        } else {
+            responseHandler.sendResponse(error, res);
+        }
     }
 });
 
 /**
  * Route for user logout.
  * Clears cookie handling session.
- * 
+ *
  * @param {String} endpoint url endpoint.
  * @param req Express request object.
  * @param res Express request object.
- * 
- * return 200: User logout succesful.
+ *
+ * @return 200: User logout succesful.
  */
 
 router.get("/auth/logout", (req, res) => {
     console.log(" (api/routes) GET /auth/logout triggered");
     res.clearCookie("access_token");
-    res.status(200).json({
-        user: {
-            uid: "",
-            firstName: "",
-            email: "",
-        },
-        serverMessage: {
+    responseHandler.sendResponse(
+        {
             isError: false,
-            accepted: true,
-            msgBody: "Successfully logged out",
+            msgBody: "You have successfully logged out",
+            code: 200,
+            user: {
+                uid: "",
+                firstName: "",
+                email: "",
+            },
         },
-    });
+        res
+    );
 });
 
 /**
+ * Route for checking if the user browsing the calling client is logged in or not.
+ *
+ * @param {String} endpoint url endpoint.
+ * @param req Express request object.
+ * @param res Express request object.
+ *
+ * @return 200: User is not logged in.
+ * @return 200: User does not have a token, and is thus logged out.
+ * @return 400: User has supplied an invalid token.
+ * @return 500: Database error.
+ */
+router.get("/auth/userstatus", async (req, res) => {
+    try {
+        const token = req.cookies["access_token"];
+        if (!token) {
+            responseHandler.sendResponse(
+                {
+                    isError: false,
+                    msgBody: "This user is not logged in",
+                    code: 200,
+                    isAuthenticated: false,
+                    user: {
+                        uid: "",
+                        firstName: "",
+                        email: "",
+                    },
+                },
+                res
+            );
+        } else {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            req.user = decoded;
+            const result = await authController.checkUserAuthenticationStatus(
+                req
+            );
+            responseHandler.sendResponse(result, res);
+        }
+    } catch (error) {
+        if (error.code) {
+            responseHandler.sendResponse(
+                {
+                    isError: true,
+                    msgBody: "User has supplied an invalid token",
+                    code: 400,
+                    isAuthenticated: false,
+                    user: {
+                        uid: "",
+                        firstName: "",
+                        email: "",
+                    },
+                },
+                res
+            );
+        } else {
+            responseHandler.sendResponse(error, res);
+        }
+    }
+});
+/**
  * Route for querying user from database.
- * 
+ *
  * @param {String} endpoint url endpoint.
  * @param authenticate middleware handling authentication.
  * @param req Express request object.
  * @param res Express request object.
- * 
+ *
  * return 200: User succesfully queried from database.
  * return 500: Database error.
  */
@@ -144,12 +212,12 @@ router.get("/auth/user", authenticate, async (req, res) => {
 
 /**
  * Route for querying user to see if authenticated.
- * 
+ *
  * @param {String} endpoint url endpoint.
  * @param authenticate middleware handling authentication.
  * @param req Express request object.
  * @param res Express request object.
- * 
+ *
  * return 200: User authenticated.
  * return 500: Database error.
  */
@@ -168,7 +236,7 @@ router.get("/auth/authenticated", authenticate, async (req, res) => {
                 accepted: true,
                 msgBody: "Client user is not logged in",
             },
-        })
+        });
     }
     try {
         const result = await authController.checkUserAuthenticationStatus(req);

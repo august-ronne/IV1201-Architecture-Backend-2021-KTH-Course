@@ -8,7 +8,7 @@ const app = express();
 
 /**
  *  Middleware
- */ 
+ */
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
@@ -20,7 +20,15 @@ app.use(cors());
 const authAPI = require("./api/routes/authAPI");
 app.use("/", authAPI);
 
-dbController.connectServerToDB(app);
+/**
+ * Attempt to connect to database
+ */
+try {
+    dbController.connectServerToDB(app);
+} catch (error) {
+    console.log("Could not connect to MongoDB Cloud Database");
+    console.log(error);
+}
 
 /**
  * Starts server on supplied port.
