@@ -36,7 +36,7 @@ describe('POST Endpoints', () => {
         expect(res.statusCode).toBe(400)
     })
     test('/auth/register', async () => {
-        let user = await userDAO.findUserByEmail(User, 'test')
+        let user = await userDAO.findUserByEmail(User, 'test@jest.com')
         if (user) {
             let test = await deleteAccount(user._id)
         }
@@ -46,13 +46,23 @@ describe('POST Endpoints', () => {
         .send({
             firstName : "test",
             lastName : "test",
-            email : "test",
+            email : "test@jest.com",
             username : "test",
-            password : "test"
+            password : "testtest"
         
         })
 
         expect(res.statusCode).toBe(201)
+    })
+    
+    test('/auth/login', async() => {
+        let res = await request(app)
+        .post('/auth/login')
+        .send({
+            test : 'wrong input'
+        });
+
+        expect(res.statusCode).toBe(400)
     })
 })
 

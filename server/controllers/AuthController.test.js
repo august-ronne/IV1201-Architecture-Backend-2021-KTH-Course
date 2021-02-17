@@ -31,7 +31,7 @@ describe('Register', () => {
             await registerAccount(account)
         }
         catch(e) {
-            expect(e).toStrictEqual({accepted: false, 
+            expect(e).toStrictEqual({ 
                                     code: 400,
                                     isError: true,
                                     msgBody: "This email is already registered"});
@@ -43,7 +43,7 @@ describe('Register', () => {
             let test = await deleteAccount(user._id)
         }
         let result = await registerAccount(account_new); 
-        expect(result).toHaveProperty("accepted",true)
+        expect(result).toHaveProperty("isError",false)
     })
 
 })
@@ -54,7 +54,7 @@ describe('Login', () => {
             await loginAccount({});
         }
         catch(e) {
-            expect(e).toStrictEqual({accepted: false, 
+            expect(e).toStrictEqual({
                                     code: 400,
                                     msgBody: "This email does not belong to a registered account",
                                     isError: true});
@@ -63,7 +63,7 @@ describe('Login', () => {
 
     test('Login success.', async () => {
         let result = await loginAccount(account);
-        expect(result).toHaveProperty("accepted",true)
+        expect(result).toHaveProperty("isError",false)
     });
 
     test('Invalid login credentials', async () => {
