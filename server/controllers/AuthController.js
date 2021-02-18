@@ -126,7 +126,7 @@ exports.registerAccount = async ({
             uid: newUser._id,
             firstName: newUser.firstName,
             email: newUser.email,
-            role: await getRoleNameById(newUser.role), // <- Cached
+            role: await exports.getRoleNameById(newUser.role), // <- Cached
         },
     };
 };
