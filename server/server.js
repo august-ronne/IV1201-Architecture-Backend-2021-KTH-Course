@@ -3,6 +3,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 const dbController = require("./controllers/DBController");
+const data = require("./data/Data");
 
 const app = express();
 
@@ -33,7 +34,8 @@ try {
 /**
  * Starts server on supplied port.
  */
-app.on("mongodb_connection_ready", () => {
+app.on("mongodb_connection_ready", async () => {
+    await data();
     app.listen(process.env.PORT || 5000, () => {
         console.log(`Server listening on port ${process.env.PORT}`);
     });
