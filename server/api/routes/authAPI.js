@@ -78,7 +78,7 @@ router.post("/auth/login", async (req, res) => {
         responseHandler.sendResponse(result, res);
     } catch (error) {
         if (isValidationError(error)) {
-            errorHandler.sendError(
+            responseHandler.sendResponse(
                 {
                     isError: true,
                     accepted: false,
@@ -162,7 +162,7 @@ router.get("/auth/userstatus", async (req, res) => {
             responseHandler.sendResponse(result, res);
         }
     } catch (error) {
-        if (error.code) {
+        if (error.code || error.name === 'JsonWebTokenError') {
             responseHandler.sendResponse(
                 {
                     isError: true,

@@ -6,7 +6,7 @@ const User = require("../models/User");
 const hasher = require("../utils/hashing");
 require("dotenv").config();
 
-const account = { firstName: "jest", lastName: "test", email: "jest.test@mail.com", username: "jest", password: "test" };
+const account = { firstName: "jest", lastName: "test", email: "jest.test@test.com", username: "jest", password: "testtest" };
 
 const account_new = { firstName: "jest", lastName: "test", email: "jest.test1@mail.com", username: "jest", password: "test" };
 
@@ -21,7 +21,6 @@ beforeAll(async () => {
     //     // app.emit("mongodb_connection_ready");
     //     console.log("Server connected to MongoDB Atlas");
     // });
-
 });
 
 
@@ -89,14 +88,6 @@ describe('getUser', () => {
         }
         
     })
-
-    // needs fix
-    // test('Valid query', async () => {
-    //     let result = await userDAO.findUserByEmail(User, 'jest.test@mail.com');
-    //     console.log(result)
-
-    //     getUser({user: {id : result._id}})
-    // })
 })
 
 describe('Authenticate', () => {
@@ -108,6 +99,14 @@ describe('Authenticate', () => {
             expect(error).toHaveProperty("accepted",false)
         }
     })
+
+    // test('valid query', async() => {
+    //     const foundUser = await userDAO.findUserByEmail(User, 'jest.test@mail.com');
+    //     user = {}
+    //     let result = await checkUserAuthenticationStatus({user: {id: foundUser._id}})
+
+    //     expect(result).toHaveProperty('isAuthenticated', true)
+    // })
 })
 
 

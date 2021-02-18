@@ -5,6 +5,9 @@ const dbController = require("../../controllers/DBController");
 const userDAO = require("../../integration/userDAO");
 const request = require('supertest');
 const mongoose = require("mongoose");
+const tokenHandler = require("../../utils/tokens");
+
+
 
 
 
@@ -54,7 +57,7 @@ describe('POST Endpoints', () => {
 
         expect(res.statusCode).toBe(201)
     })
-    
+
     test('/auth/login', async() => {
         let res = await request(app)
         .post('/auth/login')
@@ -64,8 +67,51 @@ describe('POST Endpoints', () => {
 
         expect(res.statusCode).toBe(400)
     })
+
+    test('/auth/login', async() => {
+        let res = await request(app)
+        .post('/auth/login')
+        .send({
+            email : "jest.test@test.com",
+            password: "testtest"
+        });
+
+        expect(res.statusCode).toBe(200)
+    })
+
 })
 
-// afterAll(() => {
-//     mongoose.connection.close()
-// })
+describe('GET Endpoints', () => {
+    test('auth/logout', async() => {
+        let res = await request(app)
+        .get('/auth/logout')
+
+        expect(res.statusCode).toBe(200)
+    })
+
+    test('auth/userstatus without cookie should not authenticate', async() => {
+        let res = await request(app)
+        .get('/auth/userstatus')
+
+        expect(JSON.parse(res.text).serverMessage).toHaveProperty('isAuthenticated', false)
+    })
+
+    test('auth/userstatus with valid cookie should authenticate', async() => {
+        const foundUser = await userDAO.findUserByEmail(User, 'jest.test@test.com');
+        const token = tokenHandler.generateToken(foundUser._id);
+
+        let res = await request(app)
+        .get('/auth/userstatus')
+        .set('Cookie', `access_token=${token}`)
+
+        expect(JSON.parse(res.text).serverMessage).toHaveProperty('isAuthenticated', true)
+    })
+
+    test('auth/userstatus with invalid cookie should not authenticate', async() => {
+        let res = await request(app)
+        .get('/auth/userstatus')
+        .set('Cookie', "access_token=wrong")
+
+        expect(res.statusCode).toBe(400)
+    })
+})

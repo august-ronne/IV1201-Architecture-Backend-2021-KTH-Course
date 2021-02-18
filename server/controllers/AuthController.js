@@ -185,6 +185,7 @@ exports.checkUserAuthenticationStatus = async ({ user }) => {
             uid: result._id,
             firstName: result.firstName,
             email: result.email,
+            //role: result.role
         },
     };
 };
