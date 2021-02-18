@@ -3,11 +3,13 @@ require("dotenv").config();
 
 /* Model */
 const User = require("../models/User");
+const Role = require("../models/Role");
 /* Utils */
 const hasher = require("../utils/hashing");
 const tokenHandler = require("../utils/tokens");
 /* Integration Layer */
 const userDAO = require("../integration/userDAO");
+const roleDAO = require("../integration/roleDAO");
 
 exports.logoutAccount = async () => {};
 
@@ -88,8 +90,14 @@ exports.registerAccount = async ({
         email,
         username,
         password: hashedPassword,
+        role: await exports.getRoleId("applicant"),
     });
     const newUser = await userDAO.addNewUser(user);
+
+    // Role Test:
+    // console.log("Role correct: ", await exports.isUserOfRole(newUser, "applicant"));
+    console.log(roleNameCache[newUser.role]);
+
     return {
         isError: false,
         msgBody: "Account successfully created",
@@ -98,6 +106,7 @@ exports.registerAccount = async ({
             uid: newUser._id,
             firstName: newUser.firstName,
             email: newUser.email,
+            role: await getRoleNameById(newUser.role), // <- Cached
         },
     };
 };
@@ -167,3 +176,61 @@ exports.checkUserAuthenticationStatus = async ({ user }) => {
         },
     };
 };
+
+let roleIdCache = {};
+let roleNameCache = {};
+
+/** 
+ * Gets role id from database and caches it.
+ * 
+ * @param roleName Name of role.
+ * 
+ * @returns ObjectId representing role.
+ * 
+ * @throws 500 error: Internal server error caused by server <-> db communication
+ */
+exports.getRoleId = async (roleName) => {
+    try {
+        roleIdCache[roleName] = roleIdCache[roleName] || (await roleDAO.findRoleByName(Role, roleName))._id;
+        roleNameCache[roleIdCache[roleName]] = roleName;
+        return roleIdCache[roleName]
+    }
+    catch(e) {
+        console.error("CRITICAL ERROR WHEN FINDING ROLE BY NAME!", e);
+    }
+}
+
+/** 
+ * Check if user is of role by name.
+ * 
+ * @param user Object containing role.
+ * @param roleName Name of role.
+ * 
+ * @returns boolean.
+ * 
+ * @throws 500 error: Internal server error caused by server <-> db communication
+ */
+exports.isUserOfRole = async (user, roleName) => {
+    let {role} = user;
+    return role.equals(await exports.getRoleId(roleName));
+}
+
+/** 
+ * Check if user is of role by name.
+ * 
+ * @param roleId roleId.
+ * 
+ * @returns role name.
+ * 
+ * @throws 500 error: Internal server error caused by server <-> db communication
+ */
+exports.getRoleNameById = async (roleId) => {
+    try {
+        roleNameCache[roleId] = roleNameCache[roleId] || (await roleDAO.getRoleById(Role, roleId)).name;
+        roleIdCache[roleNameCache[roleId]] = roleId;
+        return roleNameCache[roleId]
+    }
+    catch(e) {
+        console.error("CRITICAL ERROR WHEN FINDING ROLE BY ID!", e);
+    }
+}
