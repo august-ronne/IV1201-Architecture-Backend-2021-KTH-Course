@@ -12,6 +12,26 @@ const userDAO = require("../integration/userDAO");
 exports.logoutAccount = async () => {};
 
 /**
+ * Controller functions which deletes a user from the database.
+ * @param userID ID of user that should be deleted
+ * 
+ * @return Object with relevant information 
+ */
+exports.deleteAccount = async(userID) => {
+    console.log(" -> AuthController.deleteAccount() triggered")
+
+    let user = await userDAO.getUserByIDAndDelete(User, userID)
+
+    return {
+        isError: false,
+        accepted: true,
+        user: {
+            uid: user._id,
+            email: user.email
+        }
+    }
+} 
+/**
  * Controller function handling login.
  *
  * @param object Email and password from request.
@@ -123,6 +143,7 @@ exports.getUser = async ({ user }) => {
             code: 400,
         };
     }
+    // console.log('test' + user)
     const result = await userDAO.getUserByID(User, user.id);
     return {
         isError: false,
@@ -164,6 +185,7 @@ exports.checkUserAuthenticationStatus = async ({ user }) => {
             uid: result._id,
             firstName: result.firstName,
             email: result.email,
+            //role: result.role
         },
     };
 };

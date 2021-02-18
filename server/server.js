@@ -38,3 +38,5 @@ app.on("mongodb_connection_ready", () => {
         console.log(`Server listening on port ${process.env.PORT}`);
     });
 });
+
+exports.app = app;
