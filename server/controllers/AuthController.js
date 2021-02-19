@@ -48,6 +48,10 @@ exports.loginAccount = async ({ email, password }) => {
     console.log(" AuthController.loginAccount() triggered");
 
     const foundUser = await userDAO.findUserByEmail(User, email);
+    let role = ""
+    if (foundUser)
+        role = await exports.getRoleNameById(foundUser.role)
+
     if (!foundUser)
         throw {
             isError: true,
@@ -61,7 +65,7 @@ exports.loginAccount = async ({ email, password }) => {
             msgBody: "Invalid credentials",
             code: 401,
         };
-    const token = tokenHandler.generateToken(foundUser._id);
+    const token = tokenHandler.generateToken(foundUser._id, role);
     return {
         isError: false,
         msgBody: "Successfully logged in",
@@ -72,6 +76,7 @@ exports.loginAccount = async ({ email, password }) => {
             uid: foundUser._id,
             firstName: foundUser.firstName,
             email: foundUser.email,
+            role: role
         },
     };
 };
@@ -185,6 +190,7 @@ exports.checkUserAuthenticationStatus = async ({ user }) => {
     console.log(" AuthController.checkUserAuthenticationStatus() triggered");
 
     const result = await userDAO.getUserByID(User, user.id);
+    
     return {
         isError: false,
         msgBody: "This user is logged in",
@@ -194,7 +200,7 @@ exports.checkUserAuthenticationStatus = async ({ user }) => {
             uid: result._id,
             firstName: result.firstName,
             email: result.email,
-            //role: result.role
+            role: await exports.getRoleNameById(result.role)
         },
     };
 };
@@ -254,5 +260,38 @@ exports.getRoleNameById = async (roleId) => {
     }
     catch(e) {
         console.error("CRITICAL ERROR WHEN FINDING ROLE BY ID!", e);
+    }
+}
+
+
+/**
+ * Upgrades a user to recruiter
+ * @param  roleId DB id of user to be recruited
+ * 
+ * @return Relevant information and information about upgraded user
+ * 
+ * @throws 500 error: Server error at failure
+ */
+
+
+exports.upgradeUser = async (roleId) => {
+    try {
+        const result = await userDAO.changeRole(User, roleId, 'recruiter')
+
+        return {
+            isError: false,
+            msgBody: "User has been upgraded",
+            code: 200,
+            isAuthenticated: true,
+            user: {
+                uid: result._id,
+                firstName: result.firstName,
+                email: result.email,
+                role: await exports.getRoleNameById(result.role)
+            },
+        };
+    }
+    catch(err) {
+        console.error("Error", err)
     }
 }

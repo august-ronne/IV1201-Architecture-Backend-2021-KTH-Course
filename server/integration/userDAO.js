@@ -1,3 +1,7 @@
+const roleDAO = require("./roleDAO");
+const Role = require("../models/Role");
+
+
 /**
  * Integration function that adds a new user to the database.
  * 
@@ -51,4 +55,13 @@ exports.getUserByID = async (mongoDatabase, userID) => {
 exports.getUserByIDAndDelete = async (mongoDatabase, userID) => {
     console.log(" -> userDAO.getUserByIDAndDelete() triggered");
     return await mongoDatabase.findByIdAndRemove(userID);
+}
+
+
+exports.changeRole = async (mongoDatabase, userID, newRole) => {
+    console.log("roleDAO.changeRole triggered")
+    const filter = {_id : userID}
+
+    const update = { role : (await roleDAO.findRoleByName(Role, newRole))._id}
+    return await mongoDatabase.findOneAndUpdate(filter, update, {new: true})
 }
