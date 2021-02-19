@@ -9,9 +9,10 @@ dotenv.config();
  * 
  * @return The succesfully created jsonwebtoken. 
  */
-exports.generateToken = (userID) => {
+exports.generateToken = (userID, role) => {
     const token = jwt.sign(
-        { id: userID },
+        { id: userID,
+          role: role },
         process.env.JWT_SECRET,
         { expiresIn: 3600 },
     );

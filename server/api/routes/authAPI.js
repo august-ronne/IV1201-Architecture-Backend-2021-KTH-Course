@@ -149,12 +149,14 @@ router.get("/auth/userstatus", async (req, res) => {
                         uid: "",
                         firstName: "",
                         email: "",
+                        role: ""
                     },
                 },
                 res
             );
         } else {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            console.log(decoded)
             req.user = decoded;
             const result = await authController.checkUserAuthenticationStatus(
                 req
@@ -182,6 +184,47 @@ router.get("/auth/userstatus", async (req, res) => {
         }
     }
 });
+
+/**
+ * Route for upgrading a user to recruiter.
+ * 
+ * @param {String} endpoint url endpoint.
+ * @param req Express request object.
+ * @param res Express request object.
+ *
+ * @return 200: User upgraded.
+ * @return 400: User not successfully upgraded
+ * @return 500: Database error.
+ */
+
+router.post("/auth/upgrade", async (req,res) => {
+    console.log(" (api/routes) POST /auth/upgrade triggered");
+    // 602ecb9cc7401f203586617c
+    try {
+        const result = await authController.upgradeUser(req.body.id)
+        responseHandler.sendResponse(result, res);
+
+    }
+    catch(error) {
+        responseHandler.sendResponse(
+            {
+                isError: false,
+                msgBody: "Change of user role was not successful",
+                code: 400,
+                user: {
+                    uid: "",
+                    firstName: "",
+                    email: "",
+                },
+            },
+            res
+        );
+    }
+})
+
+
+
+
 /**
  * Route for querying user from database.
  *
@@ -250,5 +293,9 @@ router.get("/auth/authenticated", authenticate, async (req, res) => {
         errorHandler.sendError(error, res);
     }
 });
+
+
+
+
 
 module.exports = router;
