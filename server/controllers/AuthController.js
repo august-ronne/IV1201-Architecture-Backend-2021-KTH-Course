@@ -269,7 +269,7 @@ exports.getRoleNameById = async (roleId) => {
         throw {
             isError: true,
             accepted: false,
-            msgBody: "Unexpected server error",
+            msgBody: "error.unexpected",
             code: 500,
         };
     }
@@ -292,7 +292,7 @@ exports.upgradeUser = async (roleId) => {
 
         return {
             isError: false,
-            msgBody: "User has been upgraded",
+            msgBody: "error.unexpected",
             code: 200,
             isAuthenticated: true,
             user: {
@@ -308,7 +308,7 @@ exports.upgradeUser = async (roleId) => {
         throw {
             isError: true,
             accepted: false,
-            msgBody: "Unexpected server error",
+            msgBody: "error.unexpected",
             code: 500,
         };
     }

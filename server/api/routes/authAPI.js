@@ -39,7 +39,7 @@ router.post("/auth/register", async (req, res) => {
                 {
                     isError: true,
                     msgBody:
-                        "Bad request (either missing fields or faulty values)",
+                        "error.badRequest",//"Bad request (either missing fields or faulty values)",
                     code: 400,
                 },
                 res
@@ -83,7 +83,7 @@ router.post("/auth/login", async (req, res) => {
                     isError: true,
                     accepted: false,
                     msgBody:
-                        "Bad request (either missing fields or faulty values)",
+                        "error.badRequest",//"Bad request (either missing fields or faulty values)",
                     code: 400,
                 },
                 res
@@ -111,7 +111,7 @@ router.get("/auth/logout", (req, res) => {
     responseHandler.sendResponse(
         {
             isError: false,
-            msgBody: "You have successfully logged out",
+            msgBody: "accepted.logout",//"You have successfully logged out",
             code: 200,
             user: {
                 uid: "",
@@ -142,7 +142,7 @@ router.get("/auth/userstatus", async (req, res) => {
             responseHandler.sendResponse(
                 {
                     isError: false,
-                    msgBody: "This user is not logged in",
+                    msgBody: "accepted.login",//"This user is not logged in",
                     code: 200,
                     isAuthenticated: false,
                     user: {
@@ -168,7 +168,7 @@ router.get("/auth/userstatus", async (req, res) => {
             responseHandler.sendResponse(
                 {
                     isError: true,
-                    msgBody: "User has supplied an invalid token",
+                    msgBody: "error.token",//"User has supplied an invalid token",
                     code: 400,
                     isAuthenticated: false,
                     user: {
@@ -209,7 +209,7 @@ router.post("/auth/upgrade", async (req,res) => {
         responseHandler.sendResponse(
             {
                 isError: false,
-                msgBody: "Change of user role was not successful",
+                msgBody: "error.upgrade",//"Change of user role was not successful",
                 code: 400,
                 user: {
                     uid: "",
@@ -277,7 +277,7 @@ router.get("/auth/authenticated", authenticate, async (req, res) => {
             serverMessage: {
                 isError: false,
                 accepted: true,
-                msgBody: "Client user is not logged in",
+                msgBody: "error.authenticated",//"Client user is not logged in",
             },
         });
     }
