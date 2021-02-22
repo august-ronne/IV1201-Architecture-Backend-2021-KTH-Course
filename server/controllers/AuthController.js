@@ -225,6 +225,12 @@ exports.getRoleId = async (roleName) => {
     }
     catch(e) {
         console.error("CRITICAL ERROR WHEN FINDING ROLE BY NAME!", e);
+        throw {
+            isError: true,
+            accepted: false,
+            msgBody: "Unexpected server error",
+            code: 500,
+        };
     }
 }
 
@@ -260,6 +266,12 @@ exports.getRoleNameById = async (roleId) => {
     }
     catch(e) {
         console.error("CRITICAL ERROR WHEN FINDING ROLE BY ID!", e);
+        throw {
+            isError: true,
+            accepted: false,
+            msgBody: "Unexpected server error",
+            code: 500,
+        };
     }
 }
 
@@ -293,5 +305,11 @@ exports.upgradeUser = async (roleId) => {
     }
     catch(err) {
         console.error("Error", err)
+        throw {
+            isError: true,
+            accepted: false,
+            msgBody: "Unexpected server error",
+            code: 500,
+        };
     }
 }
