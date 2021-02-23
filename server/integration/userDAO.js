@@ -57,11 +57,34 @@ exports.getUserByIDAndDelete = async (mongoDatabase, userID) => {
     return await mongoDatabase.findByIdAndRemove(userID);
 }
 
-
+/**
+ * Integration function which deletes a user based on the supplied id.
+ * 
+ * @param  mongoDatabase Mongoose model object
+ * @param  userID UserId of user to change role
+ * @param  newRole role by name
+ * 
+ * @return Deleted user
+ */
 exports.changeRole = async (mongoDatabase, userID, newRole) => {
     console.log("roleDAO.changeRole triggered")
     const filter = {_id : userID}
 
     const update = { role : (await roleDAO.findRoleByName(Role, newRole))._id}
     return await mongoDatabase.findOneAndUpdate(filter, update, {new: true})
+}
+
+/**
+ * Integration function which deletes a user based on the supplied id.
+ * 
+ * @param  mongoDatabase Mongoose model object
+ * @param  userID UserId of user to change password
+ * @param  password new hashed password
+ * 
+ * @return Deleted user
+ */
+exports.changePassword = async (mongoDatabase, userID, password) => {
+    console.log("roleDAO.changeRole triggered")
+
+    return await mongoDatabase.findOneAndUpdate({_id : userID}, {password: password}, {new: true})
 }

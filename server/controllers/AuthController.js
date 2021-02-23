@@ -33,6 +33,78 @@ exports.deleteAccount = async(userID) => {
         }
     }
 } 
+
+
+/**
+ * Controller function generating a account recovery token.
+ *
+ * @param object Email and password from request.
+ *
+ * @return {object} Object holding request status and user information
+ *
+ * @throws 400 error: If a non-eligible user tries to login
+ * @throws 401 error: If a eligible user enters wrong credentials
+ * @throws 500 error: Internal server error caused by server <-> db communication
+ */
+exports.recoverAccount = async ({ email }) => {
+    console.log(" AuthController.recoverAccount() triggered");
+
+    const foundUser = await userDAO.findUserByEmail(User, email);
+
+    if (!foundUser)
+        throw {
+            isError: false,
+            msgBody: "accepted.recover", //To prevent probing
+            code: 200,
+        };
+    const token = tokenHandler.generateRecoverToken(foundUser._id);
+    console.log("RECOVER TOKEN FOR ", email, " : ", token);
+    return {
+        isError: false,
+        msgBody: "accepted.recover",
+        code: 200,
+        recoveryToken: token
+    };
+};
+
+/**
+ * Controller function setting a new password
+ *
+ * @param object Object holding user information
+ *
+ * @returns {object} Object holding relevant query information, user authenticated status
+ *                   , HTTP Status Code, and user information
+ *
+ * @throws 500 error: Internal server error caused by server <-> db communication
+ */
+exports.setPassword = async ({ newPassword }) => {
+    console.log(" AuthController.setPassword() triggered");
+
+    
+    const decoded = jwt.verify(token, process.env.JWT_RECOVER);
+    if(!decoded)
+        throw {
+            isError: true,
+            msgBody: "error.setPassword"
+        }
+
+    const hashedPassword = hasher.hashString(newPassword);
+
+    const result = await userDAO.changePassword(User, decoded.id, hashedPassword);
+    if(!result)
+        throw {
+            isError: true,
+            msgBody: "error.setPassword"
+        }
+    
+    return {
+        isError: false,
+        msgBody: "accepted.setPassword",
+        code: 200
+    };
+};
+
+
 /**
  * Controller function handling login.
  *
@@ -55,20 +127,20 @@ exports.loginAccount = async ({ email, password }) => {
     if (!foundUser)
         throw {
             isError: true,
-            msgBody: "This email does not belong to a registered account",
+            msgBody: "error.login",//"This email does not belong to a registered account",
             code: 400,
         };
     const correctPassword = hasher.compare(foundUser.password, password);
     if (!correctPassword)
         throw {
             isError: true,
-            msgBody: "Invalid credentials",
+            msgBody: "error.login",//"Invalid credentials",
             code: 401,
         };
     const token = tokenHandler.generateToken(foundUser._id, role);
     return {
         isError: false,
-        msgBody: "Successfully logged in",
+        msgBody: "accepted.login",//"Successfully logged in",
         code: 200,
         isAuthenticated: true,
         token,
@@ -105,7 +177,7 @@ exports.registerAccount = async ({
     if (foundUser)
         throw {
             isError: true,
-            msgBody: "This email is already registered",
+            msgBody: "error.alreadyRegistered",//"This email is already registered",
             code: 400,
         };
     const hashedPassword = hasher.hashString(password);
@@ -125,7 +197,7 @@ exports.registerAccount = async ({
 
     return {
         isError: false,
-        msgBody: "Account successfully created",
+        msgBody: "accepted.register",
         code: 201,
         user: {
             uid: newUser._id,
@@ -153,7 +225,7 @@ exports.getUser = async ({ user }) => {
         throw {
             isError: true,
             accepted: false,
-            msgBody: "Malformed user information",
+            msgBody: "error.badRequest",
             code: 400,
         };
     }
@@ -162,7 +234,7 @@ exports.getUser = async ({ user }) => {
     return {
         isError: false,
         accepted: true,
-        msgBody: "User information successfully retrieved",
+        msgBody: "accepted.information",//"User information successfully retrieved",
         user: {
             uid: result._id,
             firstName: result.firstName,
@@ -193,7 +265,7 @@ exports.checkUserAuthenticationStatus = async ({ user }) => {
     
     return {
         isError: false,
-        msgBody: "This user is logged in",
+        msgBody: "accepted.authenticated",
         code: 200,
         isAuthenticated: true,
         user: {
@@ -228,7 +300,7 @@ exports.getRoleId = async (roleName) => {
         throw {
             isError: true,
             accepted: false,
-            msgBody: "Unexpected server error",
+            msgBody: "error.unexpected",
             code: 500,
         };
     }
@@ -292,7 +364,7 @@ exports.upgradeUser = async (roleId) => {
 
         return {
             isError: false,
-            msgBody: "error.unexpected",
+            msgBody: "accepted.upgrade",
             code: 200,
             isAuthenticated: true,
             user: {
