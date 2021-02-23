@@ -47,6 +47,42 @@ router.post("/auth/recover", async (req, res) => {
     }
 });
 
+
+/**
+ * Route for user registration.
+ *
+ * @param {String} endpoint url endpoint.
+ * @param req Express request object.
+ * @param res Express response object.
+ *
+ * @return 201: Recover token generated correctly.
+ * @return 400: Necessary information is not supplied.
+ * @return 500: Database error.
+ */
+router.post("/auth/setpassword", async (req, res) => {
+    console.log(" (api/routes) POST /auth/setpassword triggered");
+    try {
+        let result = await authController.setPassword(req.body);
+        responseHandler.sendResponse(result, res);
+    } catch (error) {
+        if (isValidationError(error)) {
+            console.log(error);
+            responseHandler.sendResponse(
+                {
+                    isError: true,
+                    msgBody:
+                        "error.badRequest",
+                    code: 400,
+                },
+                res
+            );
+        } else {
+            responseHandler.sendResponse(error, res);
+        }
+    }
+});
+
+
 /**
  * Route for user registration.
  *

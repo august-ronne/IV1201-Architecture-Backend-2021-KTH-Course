@@ -54,7 +54,7 @@ exports.recoverAccount = async ({ email }) => {
     if (!foundUser)
         throw {
             isError: false,
-            msgBody: "accepted.recover", //To prevent probing
+            msgBody: "error.recover",
             code: 200,
         };
     const token = tokenHandler.generateRecoverToken(foundUser._id);
@@ -77,7 +77,7 @@ exports.recoverAccount = async ({ email }) => {
  *
  * @throws 500 error: Internal server error caused by server <-> db communication
  */
-exports.setPassword = async ({ newPassword }) => {
+exports.setPassword = async ({ token, password }) => {
     console.log(" AuthController.setPassword() triggered");
 
     
@@ -88,7 +88,7 @@ exports.setPassword = async ({ newPassword }) => {
             msgBody: "error.setPassword"
         }
 
-    const hashedPassword = hasher.hashString(newPassword);
+    const hashedPassword = hasher.hashString(password);
 
     const result = await userDAO.changePassword(User, decoded.id, hashedPassword);
     if(!result)

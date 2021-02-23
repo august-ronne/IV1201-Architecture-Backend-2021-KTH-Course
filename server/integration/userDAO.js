@@ -84,7 +84,7 @@ exports.changeRole = async (mongoDatabase, userID, newRole) => {
  * @return Deleted user
  */
 exports.changePassword = async (mongoDatabase, userID, password) => {
-    console.log("roleDAO.changeRole triggered")
+    console.log("roleDAO.changePassword triggered")
 
     return await mongoDatabase.findOneAndUpdate({_id : userID}, {password: password}, {new: true})
 }
