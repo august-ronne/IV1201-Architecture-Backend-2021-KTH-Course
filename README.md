@@ -33,13 +33,16 @@ To read about these use cases in greater detail, please refer to the application
 ## 2. Tools Required to Install and Run Application
 
 The requirements listed here need to be met before downloading the code and installing the project in your local environment.
-- **[Node.js](https://nodejs.org/en/)**: This front-end is built using Node.js. You need to install Node.js to run this application.
+- **[Node.js](https://nodejs.org/en/)**: This back-end is built using Node.js. You need to install Node.js to run this application.
 - **[npm](https://www.npmjs.com/)**: The Node Package Manager (npm) is used to build the application and install the frameworks it uses. You need to install npm to run this application.
+- **[MongoDB Atlas Cloud](https://www.mongodb.com/cloud/atlas)**: This back-end stores its persistent data in a MongoDB Atlas Cloud Database. It must be able to connect to the cloud database in order to start. If the back-end can not connect to its database it will shut down before it starts listening for incoming clients. To get started with creating your database, read the section **3. Installation and Configuration** just below.
 
 ## 3. Installation and Configuration
 
 1. Clone the repository and run the command `npm install` inside of the `client` directory. This will install the necessary dependencies.
-2. Create a file called `.env` in the root directory. Instructions on what needs to be in the file can be found in `.env.example`.
+2. Go to https://www.mongodb.com/cloud/atlas and create a MongoDB Atlas account.
+3. Go to the [MongoDB Atlas Documentation](https://docs.atlas.mongodb.com/) to learn how to create and configure your own cluster. You must do some reading on your own here if you want to get it to work. Writing sufficient documentation that takes you through every step of getting MongoDB Atlas to work is way out of the scope of this README
+4. Create a file called `.env` in the root directory. Instructions on what needs to be in the file can be found in `.env.example`.
 
 ## 4. Run Back-end in Development Environment
 
@@ -145,16 +148,16 @@ Utility functionality used by the back-end to hash sensitive data, generate toke
 validate incoming requests.
 
 
-**Database**:
+### Database
 
-As stated above, the back-end uses a MongoDB Cloud Atlas Database to store its persistent data.
+As stated above in this section, the back-end uses a MongoDB Cloud Atlas Database to store its persistent data.
 The database design is illustrated in this diagram:
 
 <kbd><img src="/readme-images/readme-img-db-design.png" ></kbd>
 
 No manual input or insertion of data is needed to install and run this application. 
 As long as your MongoDB Atlas account has a live Cluster that can connect to this back-end (see sections **2. Tools Required to Run and Install Application**,
-and **3. Installation and Configuration**)
+and **3. Installation and Configuration**) you only have to start the back-end to populate the database with the necessary data.
 
 ## Frameworks Used
 
@@ -162,49 +165,14 @@ The frameworks that are listed below are installed in your project when you run 
 To read more about any of these frameworks, visit the [npm website](https://www.npmjs.com/) and copy the
 **exact** framework name from the list below and paste it in their search bar.
 
-* ...
+- bcryptjs
+- cookie-parser
+- cors
+- dotenv
+- express
+- jest
+- joi
+- jsonwebtoken
+- mongoose
+- nodemon
 _____
-# iv1201-auth
-
-### (1) Clone repo
-
-### (2) cd /server
-
-### (3) npm install
-
-### (4) create .env file (in /server directory)
-  fill .env file with data according to the blueprint .env.example
-  
-### (4) Start server by running npm start
-  
-### Test API using Postman (or other tool)
-  
-### Register User
-    POST http://localhost:<SERVER_PORT>/auth/register
-    Headers: 
-      Content-Type | application/json
-    Body (JSON):
-      {
-      "firstName": "bob",
-      "lastName": "bobsson",
-      "email": "bob@test.com",
-      "username": "bobby",
-      "password": "testing"
-      }
-    
-### Login User
-    POST http://localhost:<SERVER_PORT>/auth/login
-    Headers: 
-      Content-Type | application/json
-    Body (JSON):
-      {
-        "email" "bob@test.com",
-        "password": "testing"
-      }
-      
-### Get User Data
-    GET http://localhost:<SERVER_PORT>/auth/user
-    Headers:
-      x-auth-token | token value from /login result
-    Body (JSON):
-      not needed
