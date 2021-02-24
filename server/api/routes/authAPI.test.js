@@ -3,6 +3,7 @@ const {registerAccount, loginAccount, getUser, logoutAccount, deleteAccount, che
 const User = require("../../models/User");
 const dbController = require("../../controllers/DBController");
 const userDAO = require("../../integration/userDAO");
+const roleDAO = require("../../integration/roleDAO");
 const request = require('supertest');
 const mongoose = require("mongoose");
 const tokenHandler = require("../../utils/tokens");
@@ -72,8 +73,8 @@ describe('POST Endpoints', () => {
         let res = await request(app)
         .post('/auth/login')
         .send({
-            email : "jest.test@test.com",
-            password: "testtest"
+            email : "admin@admin.com",
+            password: "admin01"
         });
 
         expect(res.statusCode).toBe(200)
@@ -97,12 +98,15 @@ describe('GET Endpoints', () => {
     })
 
     test('auth/userstatus with valid cookie should authenticate', async() => {
-        const foundUser = await userDAO.findUserByEmail(User, 'jest.test@test.com');
-        const token = tokenHandler.generateToken(foundUser._id);
+        const foundUser = await userDAO.findUserByEmail(User, 'test@test.com');
+        // const role = roleDAO.getRoleById(foundUser.role)
+        const token = tokenHandler.generateToken(foundUser._id, 'applicant');
 
         let res = await request(app)
         .get('/auth/userstatus')
         .set('Cookie', `access_token=${token}`)
+
+        console.log(res.text)
 
         expect(JSON.parse(res.text).serverMessage).toHaveProperty('isAuthenticated', true)
     })

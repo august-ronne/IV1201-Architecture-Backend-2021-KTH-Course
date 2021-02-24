@@ -6,7 +6,7 @@ const User = require("../models/User");
 const hasher = require("../utils/hashing");
 require("dotenv").config();
 
-const account = { firstName: "jest", lastName: "test", email: "jest.test@test.com", username: "jest", password: "testtest" };
+const account = { firstName: "jest", lastName: "test", email: "test@test.com", username: "jest", password: "testtest" };
 
 const account_new = { firstName: "jest", lastName: "test", email: "jest.test1@mail.com", username: "jest", password: "test" };
 
@@ -33,7 +33,7 @@ describe('Register', () => {
             expect(e).toStrictEqual({ 
                                     code: 400,
                                     isError: true,
-                                    msgBody: "This email is already registered"});
+                                    msgBody: "error.alreadyRegistered"});
         }
     });
     test('Register success', async() => {
@@ -55,13 +55,14 @@ describe('Login', () => {
         catch(e) {
             expect(e).toStrictEqual({
                                     code: 400,
-                                    msgBody: "This email does not belong to a registered account",
+                                    msgBody: "error.login",
                                     isError: true});
         }
     });
 
     test('Login success.', async () => {
-        let result = await loginAccount(account);
+        // let result = await loginAccount(account);
+        let result = await loginAccount({email:'test@test.com', password:'testtest'});
         expect(result).toHaveProperty("isError",false)
     });
 
