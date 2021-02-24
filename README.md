@@ -52,8 +52,18 @@ To run tests against the back-end development environment, run the command `npm 
 This command will launch the test runner in interactive watch mode.
 This will run all tests in sequence and output the results in the terminal window that was used run the `npm test` command.
 
-## Back-end Structure
-The file tree contained in the `src` directory looks as follows:
+## Back-end, Integration, and Database Structure
+
+The back-end is built using the Express framework combined with a MongoDB Atlas Cloud Database. While the general architecture of the back-end will be explained here, the best place to start for anyone without any previous Express or MongoDb experience that wishes to continue developing this project would be to consult the official Express and MongoDB documentation:
+
+- [Express - Getting Started](https://expressjs.com/en/starter/installing.html)
+- [Express - Fast, unopinionated, minimalist web framework for Node.js ](https://expressjs.com/)
+
+- [MongoDB is a general purpose, document-based, distributed database built for modern application developers and for the cloud era](https://www.mongodb.com/)
+- [MongoDB - Welcome to the MongoDB Documentation](https://docs.mongodb.com/)
+
+
+The file tree contained in the `server` directory looks as follows:
 ```
 .
 ├── api
@@ -88,37 +98,35 @@ The file tree contained in the `src` directory looks as follows:
 ├── jest.config.js
 └── server.js
  ```
-The front-end is built using the React framework. While the general architecture of the front-end will be explained here, the best place to start for anyone without any previous React experience that wishes to continue developing this project would be to consult the official React documentation:
-- [Tutorial: Intro to React](https://reactjs.org/tutorial/tutorial.html)
-- [React - A JavaScript library for building user interfaces](https://reactjs.org/)
 
-### Application Structure Explained
+### Back-end Structure Explained
 
-**Components**
+The back-end is built according the Model-View-Controller (MVC) architectural pattern.
+[An Introduction to MVC](https://www.tutorialspoint.com/mvc_framework/mvc_framework_introduction.htm)
 
-Every component in this directory can be said to represent its own view. Some of them, like `Message.js`, is only rendered as an inner component of other components, but could theoretically be rendered on its own.
+**API**:
 
-**Context**
+The `api` directory can be said to represent the view layer of the back-end. The file `/routes/authAPI.js` is the only file
+that a client can send a HTTP request to. The `middleware` and `serverResponses` directories contain helper functionality that
+aids the `/routes/authAPI.js` file in parsing and responding to the requests it receives.
 
-The global state of the front-end is stored here. Currently the global state consists of the status of the user browsing the front-end, for example if the user is authenticated or not. Each component in the whole front-end will have access to the global state.
+A client can call the following methods in the API:
+* POST /auth/recover (used for reset password functionality)
+* POST /auth/setpassword (used for reset password functionality)
+* POST /auth/register (register a new account)
+* POST /auth/login (log in an account)
+* GET /auth/logout (log out an account)
+* GET /auth/userstatus (get status of calling client)
+* POST /auth/upgrade (used to assign admin status to existing account)
 
-**HoCs**
+**Controller**:
 
-HoCs stands for Higher-order Components. These components can not be considered as views on their own, but rather encapsulates other view components in order to generalize some functionality.
+Contains the back-end controllers. The `AuthController.js` file helps the View to handle authentication and authorization.
+The `DBController` is used by the back-end to connect to its external database.
 
-**Models**
+**Data**:
 
-In this application only the html forms are modeled in the `Models` directory, but other models could be added here if you would need to.
-The forms modeled here are used in the `Register.js` and `Login.js`components. The models are created in order to supply the forms with validation.
-
-**Services**
-The files in this directory are responsible for calling the API of the back-end/back-ends the front-end wishes to use.
-
-**Styles**
-Every CSS file is placed here
-
-**Tests**
-Contains acceptance tests
+These files are used to f
 
 ## Frameworks Used
 
