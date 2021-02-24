@@ -8,7 +8,7 @@ The front-end and its documentation can be found here:
 
 ____
 
-# IV1201 Project Group #16: Recruitment Application Front-end
+# IV1201 Project Group #16: Recruitment Application Back-end
 
 **All links in this README are functioning as of 23/02/2021**
 
@@ -21,7 +21,7 @@ This is the back-end of a reqruitment application built for the KTH Royal Instit
 - [Visit official webpage of the IV1201 course](https://www.kth.se/student/kurser/kurs/IV1201)
 
 
-## Application Explained
+## 1. Application Explained
 
 The application requirements and description can be found in the pdf linked below:
 
@@ -30,29 +30,29 @@ The application requirements and description can be found in the pdf linked belo
 The application currently implements **Use Case 5.1 (Create Account)**, and **Use Case 5.2 (Login)**.
 To read about these use cases in greater detail, please refer to the application description linked above.
 
-## Tools Required to Install and Run Application
+## 2. Tools Required to Install and Run Application
 
 The requirements listed here need to be met before downloading the code and installing the project in your local environment.
 - **[Node.js](https://nodejs.org/en/)**: This front-end is built using Node.js. You need to install Node.js to run this application.
 - **[npm](https://www.npmjs.com/)**: The Node Package Manager (npm) is used to build the application and install the frameworks it uses. You need to install npm to run this application.
 
-## Installation and Configuration
+## 3. Installation and Configuration
 
 1. Clone the repository and run the command `npm install` inside of the `client` directory. This will install the necessary dependencies.
 2. Create a file called `.env` in the root directory. Instructions on what needs to be in the file can be found in `.env.example`.
 
-## Run Back-end in Development Environment
+## 4. Run Back-end in Development Environment
 
 1. In the root directory, run the command `npm run dev`
    The back-end is now running on https://localhost:N where N is the port number you defined in the `.env` file
 
-## Run Back-end Tests in Development Environment
+## 5. Run Back-end Tests in Development Environment
 
 To run tests against the back-end development environment, run the command `npm test` in the `client` directory.
 This command will launch the test runner in interactive watch mode.
 This will run all tests in sequence and output the results in the terminal window that was used run the `npm test` command.
 
-## Back-end, Integration, and Database Structure
+## 6. Back-end and Database Structure
 
 The back-end is built using the Express framework combined with a MongoDB Atlas Cloud Database. While the general architecture of the back-end will be explained here, the best place to start for anyone without any previous Express or MongoDb experience that wishes to continue developing this project would be to consult the official Express and MongoDB documentation:
 
@@ -100,7 +100,6 @@ The file tree contained in the `server` directory looks as follows:
  ```
 
 ### Back-end Structure Explained
-
 The back-end is built according the Model-View-Controller (MVC) architectural pattern.
 [An Introduction to MVC](https://www.tutorialspoint.com/mvc_framework/mvc_framework_introduction.htm)
 
@@ -126,7 +125,36 @@ The `DBController` is used by the back-end to connect to its external database.
 
 **Data**:
 
-These files are used to f
+These files are used to fill the database with the required data the first time you run the back-end.
+Read more about the application's database solution in the **Database** section below.
+
+**Integration**:
+
+This directory contains the only files that directly manipulate the data stored in the external database.
+Read more about the application's database solution in the **Database** section below.
+
+**Models**:
+
+Contains the Models used by the back-end. `User.js` models the user data that is stored in the external database.
+`Role.js` models the role data that is stored in the external database.
+Read more about the application's database solution in the **Database** section below.
+
+**Utils**:
+
+Utility functionality used by the back-end to hash sensitive data, generate tokens for users loggging in, and
+validate incoming requests.
+
+
+**Database**:
+
+As stated above, the back-end uses a MongoDB Cloud Atlas Database to store its persistent data.
+The database design is illustrated in this diagram:
+
+<kbd><img src="/readme-images/readme-img-db-design.png" ></kbd>
+
+No manual input or insertion of data is needed to install and run this application. 
+As long as your MongoDB Atlas account has a live Cluster that can connect to this back-end (see sections **2. Tools Required to Run and Install Application**,
+and **3. Installation and Configuration**)
 
 ## Frameworks Used
 
