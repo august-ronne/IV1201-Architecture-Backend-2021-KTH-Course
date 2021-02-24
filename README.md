@@ -30,7 +30,7 @@ The application requirements and description can be found in the pdf linked belo
 The application currently implements **Use Case 5.1 (Create Account)**, and **Use Case 5.2 (Login)**.
 To read about these use cases in greater detail, please refer to the application description linked above.
 
-## 2. Tools Required to Install and Run Application
+## 2. Tools Required to Install and Run Back-end
 
 The requirements listed here need to be met before downloading the code and installing the project in your local environment.
 - **[Node.js](https://nodejs.org/en/)**: This back-end is built using Node.js. You need to install Node.js to run this application.
@@ -55,7 +55,11 @@ To run tests against the back-end development environment, run the command `npm 
 This command will launch the test runner in interactive watch mode.
 This will run all tests in sequence and output the results in the terminal window that was used run the `npm test` command.
 
-## 6. Back-end and Database Structure
+## 6. Start Back-end for Production
+
+To start the back-end for production, run the command `npm start` in the root directory.
+
+## 7. Back-end and Database Structure
 
 The back-end is built using the Express framework combined with a MongoDB Atlas Cloud Database. While the general architecture of the back-end will be explained here, the best place to start for anyone without any previous Express or MongoDb experience that wishes to continue developing this project would be to consult the official Express and MongoDB documentation:
 
@@ -159,7 +163,7 @@ No manual input or insertion of data is needed to install and run this applicati
 As long as your MongoDB Atlas account has a live Cluster that can connect to this back-end (see sections **2. Tools Required to Run and Install Application**,
 and **3. Installation and Configuration**) you only have to start the back-end to populate the database with the necessary data.
 
-## Frameworks Used
+## 8. Frameworks Used
 
 The frameworks that are listed below are installed in your project when you run the `npm install` command.
 To read more about any of these frameworks, visit the [npm website](https://www.npmjs.com/) and copy the
