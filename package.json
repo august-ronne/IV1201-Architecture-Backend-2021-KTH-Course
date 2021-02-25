@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "jest --testEnvironment=node --verbose --forceExit --watchAll --runInBand",
+    "test": "jest",
     "start": "cd server && node server.js",
     "dev": "cd server && nodemon server.js"
   },
