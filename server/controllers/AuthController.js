@@ -83,11 +83,11 @@ exports.setPassword = async ({ token, password }) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_RECOVER);
         if(!decoded)
-        throw {
-            isError: true,
-            msgBody: "error.setPassword",
-            code: 400
-        }
+            throw {
+                isError: true,
+                msgBody: "error.setPassword",
+                code: 400
+            }
     } catch(e) {
         throw {
             isError: true,

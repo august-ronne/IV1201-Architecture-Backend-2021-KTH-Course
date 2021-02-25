@@ -21,6 +21,13 @@ app.use(cors());
 const authAPI = require("./api/routes/authAPI");
 app.use("/", authAPI);
 
+/*app.use((err, req, res, next) => {
+    res.locals.error = err;
+    const status = err.status || 500;
+    res.status(status);
+    res.render('error');
+});*/
+
 /**
  * Attempt to connect to database
  */
