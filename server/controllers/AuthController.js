@@ -85,7 +85,8 @@ exports.setPassword = async ({ token, password }) => {
     if(!decoded)
         throw {
             isError: true,
-            msgBody: "error.setPassword"
+            msgBody: "error.setPassword",
+            code: 400
         }
 
     const hashedPassword = hasher.hashString(password);
@@ -94,7 +95,8 @@ exports.setPassword = async ({ token, password }) => {
     if(!result)
         throw {
             isError: true,
-            msgBody: "error.setPassword"
+            msgBody: "error.setPassword",
+            code: 400
         }
     
     return {
