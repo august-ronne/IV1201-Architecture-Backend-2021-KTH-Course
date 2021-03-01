@@ -80,14 +80,22 @@ exports.recoverAccount = async ({ email }) => {
 exports.setPassword = async ({ token, password }) => {
     console.log(" AuthController.setPassword() triggered");
 
-    
-    const decoded = jwt.verify(token, process.env.JWT_RECOVER);
-    if(!decoded)
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_RECOVER);
+        if(!decoded)
+            throw {
+                isError: true,
+                msgBody: "error.setPassword",
+                code: 400
+            }
+    } catch(e) {
         throw {
             isError: true,
             msgBody: "error.setPassword",
             code: 400
         }
+    }
+    
 
     const hashedPassword = hasher.hashString(password);
 

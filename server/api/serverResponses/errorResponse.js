@@ -10,7 +10,7 @@
  */
 exports.sendErrorResponse = (responseContents, res) => {
     if (responseContents.code) {
-        res.status(responseContents.code).json({
+        res.status(responseContents.code || 500).json({
             serverMessage: responseContents,
         });
     } else {
@@ -18,7 +18,7 @@ exports.sendErrorResponse = (responseContents, res) => {
             serverMessage: {
                 isError: true,
                 msgBody:
-                    "Something went wrong when communicating with the database",
+                    "error.unexpected",
                 code: 500,
             },
         });

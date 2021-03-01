@@ -26,7 +26,7 @@ function authenticate(req, res, next) {
     } catch (error) {
         responseHandler.sendResponse({
             isError: true,
-            msgBody: "Token is not valid",
+            msgBody: "error.token",
             code: 401,
         });
     }

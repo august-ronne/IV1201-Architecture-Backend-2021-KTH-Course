@@ -9,7 +9,7 @@
  * 
  */
 exports.sendSuccessResponse = (responseContents, res) => {
-    res.status(responseContents.code).json({
+    res.status(responseContents.code || 200).json({
         serverMessage: responseContents,
     });
 };
