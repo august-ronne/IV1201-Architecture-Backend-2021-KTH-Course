@@ -40,4 +40,3 @@ exports.getRoleById = async (mongoDatabase, roleId) => {
     return await mongoDatabase.findById(roleId);
 }
 
-
