@@ -141,11 +141,6 @@ router.post("/auth/login", async (req, res) => {
             req.body
         );
         const result = await authController.loginAccount(validatedRequest);
-        const { token } = result;
-        res.cookie("access_token", token, {
-            httpOnly: true,
-            sameSite: true,
-        });
         responseHandler.sendResponse(result, res);
     } catch (error) {
         if (isValidationError(error)) {
