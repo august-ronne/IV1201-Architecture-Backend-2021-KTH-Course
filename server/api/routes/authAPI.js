@@ -235,7 +235,7 @@ router.get("/auth/userstatus", async (req, res) => {
             responseHandler.sendResponse(result, res);
         }
     } catch (error) {
-        if (error.code || error.name === 'JsonWebTokenError') {
+        if (error.code || error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
             responseHandler.sendResponse(
                 {
                     isError: true,

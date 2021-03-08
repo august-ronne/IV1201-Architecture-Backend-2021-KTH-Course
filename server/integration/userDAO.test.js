@@ -83,7 +83,7 @@ describe('findUserByEmail', () => {
 
 
     it('should succeed with a valid email', async() => {
-        let user = await userDAO.findUserByEmail(User, 'test@test.com')
+        let user = await userDAO.findUserByEmail(User, 'hello12113@gmail.com')
         expect(user).toBeDefined()
     })
 })
@@ -127,7 +127,7 @@ describe('getUserByIDAndDelete', () => {
 
 
     it('should succeed with a valid email', async() => {
-        let query = await User.findOne({ email:'test@jest.com' })
+        let query = await User.findOne({ email:'hello1213@gmail.com' })
 
         let result = User.findByIdAndRemove(query._id, async (err, result) => {
             if (err) console.log(err)
@@ -135,7 +135,7 @@ describe('getUserByIDAndDelete', () => {
                 const newUser = new User({
                     firstName: 'test',
                     lastName: 'test',
-                    email: 'test@jest.com',
+                    email: 'hello1213@gmail.com',
                     username: 'test',
                     password: '$2a$10$x3U8O/Y4lA14lD7IYgCMuee8bcs0HPCClO7ALc247LdqnXQXBV4hm',
                     role: await authController.getRoleId("applicant"),
@@ -156,7 +156,7 @@ describe('getUserByIDAndDelete', () => {
 describe('changeRole', () => {
     it('should fail with no specified role', async () => {
         try {
-            let query = await User.findOne({ email:'test@jest.com' })
+            let query = await User.findOne({ email:'aaaaaa@kth.se' })
             await userDAO.changeRole(User, query._id)
         }
         catch(error) {
@@ -166,7 +166,7 @@ describe('changeRole', () => {
 
     it('should fail with a nonexistent role', async () => {
         try {
-            let query = await User.findOne({ email:'test@jest.com' })
+            let query = await User.findOne({ email:'aaaaaa@kth.se' })
             await userDAO.changeRole(User, query._id, 'false')
         }
         catch(error) {
@@ -175,7 +175,7 @@ describe('changeRole', () => {
     })
 
 it('should succeed with a valid role', async () => {
-        let query = await User.findOne({ email:'test@jest.com' })
+        let query = await User.findOne({ email:'aaaaaa@kth.se' })
         let result = await userDAO.changeRole(User, query._id, 'applicant')
     
         expect(result).toBeDefined()
@@ -194,7 +194,7 @@ describe('changePassword', () => {
     })
 
     it('should succeed with a valid password', async () => {
-        let query = await User.findOne({ email:'hello123@gmail.com' })
+        let query = await User.findOne({ email:'afasfdaf@fasfas.com' })
         let result = await userDAO.changePassword(User, query._id, 'testjest')
  
         expect(result).toBeDefined()
