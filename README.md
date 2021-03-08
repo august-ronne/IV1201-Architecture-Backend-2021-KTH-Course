@@ -161,9 +161,7 @@ validate incoming requests.
 As stated above in this section, the back-end uses a MongoDB Cloud Atlas Database to store its persistent data.
 The database contains these tables:
 
-TABLES HERE
-
-**applicationstatuses**
+**(table #1) applicationstatuses**
 
 | Attribute | Data Type |
 | --- | --- |
@@ -171,7 +169,7 @@ TABLES HERE
 | name | String |
 
 
-**competenceprofiles**
+**(table #2) acompetenceprofiles**
 
 | Attribute | Data Type |
 | --- | --- |
@@ -182,7 +180,7 @@ TABLES HERE
 | years of experience | String |
 
 
-**competences**
+**(table #3) acompetences**
 
 | Attribute | Data Type |
 | --- | --- |
@@ -190,14 +188,14 @@ TABLES HERE
 | name | String |
 
 
-**roles**
+**(table #4) aroles**
 
 | Attribute | Data Type |
 | --- | --- |
 | \_id (Primary Key) | String |
 | name | String |
 
-**users**
+**(table #5) ausers**
 
 
 | Attribute | Data Type |
