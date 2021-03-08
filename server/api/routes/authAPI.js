@@ -141,12 +141,6 @@ router.post("/auth/login", async (req, res) => {
             req.body
         );
         const result = await authController.loginAccount(validatedRequest);
-        // steps below are necessary
-        const { token } = result;
-        res.cookie("access_token", token, {
-            httpOnly: true,
-            sameSite: true,
-        });
         responseHandler.sendResponse(result, res);
     } catch (error) {
         if (isValidationError(error)) {
@@ -207,11 +201,29 @@ router.get("/auth/logout", (req, res) => {
  * @return 400: User has supplied an invalid token.
  * @return 500: Database error.
  */
-router.get("/auth/userstatus", async (req, res) => {
+router.post("/auth/userstatus", async (req, res) => {
+    console.log("new userstatus entered")
     // if (!req.body.user) responseHander.sendResponse(...)
+    if (!req.body.user) {
+        responseHandler.sendResponse(
+            {
+                isError: false,
+                msgBody: "accepted.login",//"This user is not logged in",
+                code: 200,
+                isAuthenticated: false,
+                user: {
+                    uid: "",
+                    firstName: "",
+                    email: "",
+                    role: ""
+                },
+            },
+            res
+        );
+    }
     try {
-        // token = req.body.user.token;
-        const token = req.cookies["access_token"];
+        const token = req.body.user.token;
+        console.log("backend userstatus token", token);
         if (!token) {
             responseHandler.sendResponse(
                 {
@@ -233,7 +245,7 @@ router.get("/auth/userstatus", async (req, res) => {
             console.log(decoded)
             req.user = decoded;
             const result = await authController.checkUserAuthenticationStatus(
-                req
+                req, token
             );
             responseHandler.sendResponse(result, res);
         }
