@@ -141,6 +141,11 @@ router.post("/auth/login", async (req, res) => {
             req.body
         );
         const result = await authController.loginAccount(validatedRequest);
+        const { token } = result;
+        res.cookie("access_token", token, {
+            httpOnly: true,
+            sameSite: true,
+        });
         responseHandler.sendResponse(result, res);
     } catch (error) {
         if (isValidationError(error)) {
@@ -173,7 +178,6 @@ router.post("/auth/login", async (req, res) => {
 
 router.get("/auth/logout", (req, res) => {
     console.log(" (api/routes) GET /auth/logout triggered");
-    res.clearCookie("access_token");
     responseHandler.sendResponse(
         {
             isError: false,
@@ -202,28 +206,9 @@ router.get("/auth/logout", (req, res) => {
  * @return 500: Database error.
  */
 router.post("/auth/userstatus", async (req, res) => {
-    console.log("new userstatus entered")
-    // if (!req.body.user) responseHander.sendResponse(...)
-    if (!req.body.user) {
-        responseHandler.sendResponse(
-            {
-                isError: false,
-                msgBody: "accepted.login",//"This user is not logged in",
-                code: 200,
-                isAuthenticated: false,
-                user: {
-                    uid: "",
-                    firstName: "",
-                    email: "",
-                    role: ""
-                },
-            },
-            res
-        );
-    }
+    console.log("backend userstatus", req.body);
     try {
-        const token = req.body.user.token;
-        console.log("backend userstatus token", token);
+        const token = req.body.token;
         if (!token) {
             responseHandler.sendResponse(
                 {
@@ -245,7 +230,7 @@ router.post("/auth/userstatus", async (req, res) => {
             console.log(decoded)
             req.user = decoded;
             const result = await authController.checkUserAuthenticationStatus(
-                req, token
+                req
             );
             responseHandler.sendResponse(result, res);
         }

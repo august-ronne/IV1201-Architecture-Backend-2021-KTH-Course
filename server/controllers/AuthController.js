@@ -268,9 +268,8 @@ exports.getUser = async ({ user }) => {
  *
  * @throws 500 error: Internal server error caused by server <-> db communication
  */
-exports.checkUserAuthenticationStatus = async ({ user }, token) => {
+exports.checkUserAuthenticationStatus = async ({ user }) => {
     console.log(" AuthController.checkUserAuthenticationStatus() triggered");
-    console.log("controller checkUserAuth... token", token);
     const result = await userDAO.getUserByID(User, user.id);
     
     return {
@@ -282,7 +281,6 @@ exports.checkUserAuthenticationStatus = async ({ user }, token) => {
             uid: result._id,
             firstName: result.firstName,
             email: result.email,
-            token,
             role: await exports.getRoleNameById(result.role)
         },
     };
