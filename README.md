@@ -1,4 +1,4 @@
-# IMPORTANT
+# IMPORTANT (READ FIRST)
 
 1. Download and install the job application back-end for this application **after** finishing this tutorial.
   The authentication back-end and its documentation can be found here:
