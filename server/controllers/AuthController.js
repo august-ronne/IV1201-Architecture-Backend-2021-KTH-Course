@@ -153,12 +153,12 @@ exports.loginAccount = async ({ email, password }) => {
         msgBody: "accepted.login",//"Successfully logged in",
         code: 200,
         isAuthenticated: true,
-        token,
         user: {
             uid: foundUser._id,
             firstName: foundUser.firstName,
             email: foundUser.email,
-            role: role
+            role: role,
+            token,            
         },
     };
 };
@@ -270,7 +270,6 @@ exports.getUser = async ({ user }) => {
  */
 exports.checkUserAuthenticationStatus = async ({ user }) => {
     console.log(" AuthController.checkUserAuthenticationStatus() triggered");
-
     const result = await userDAO.getUserByID(User, user.id);
     
     return {

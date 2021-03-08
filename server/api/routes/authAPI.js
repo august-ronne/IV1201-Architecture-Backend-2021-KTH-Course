@@ -141,11 +141,6 @@ router.post("/auth/login", async (req, res) => {
             req.body
         );
         const result = await authController.loginAccount(validatedRequest);
-        const { token } = result;
-        res.cookie("access_token", token, {
-            httpOnly: true,
-            sameSite: true,
-        });
         responseHandler.sendResponse(result, res);
     } catch (error) {
         if (isValidationError(error)) {
@@ -178,7 +173,6 @@ router.post("/auth/login", async (req, res) => {
 
 router.get("/auth/logout", (req, res) => {
     console.log(" (api/routes) GET /auth/logout triggered");
-    res.clearCookie("access_token");
     responseHandler.sendResponse(
         {
             isError: false,
@@ -206,9 +200,10 @@ router.get("/auth/logout", (req, res) => {
  * @return 400: User has supplied an invalid token.
  * @return 500: Database error.
  */
-router.get("/auth/userstatus", async (req, res) => {
+router.post("/auth/userstatus", async (req, res) => {
+    console.log("backend userstatus", req.body);
     try {
-        const token = req.cookies["access_token"];
+        const token = req.body.token;
         if (!token) {
             responseHandler.sendResponse(
                 {
