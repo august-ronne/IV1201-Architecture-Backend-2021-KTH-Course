@@ -163,6 +163,54 @@ The database contains these tables:
 
 TABLES HERE
 
+**applicationstatuses**
+
+| Attribute | Data Type |
+| --- | --- |
+| \_id (Primary Key) | String |
+| name | String |
+
+
+**competenceprofiles**
+
+| Attribute | Data Type |
+| --- | --- |
+| \_id (Primary Key) | String |
+| person (References table _user_) | String |
+| competence (References table _competences_) | String |
+| status (References table _applicationstatuses_) | String |
+| years of experience | String |
+
+
+**competences**
+
+| Attribute | Data Type |
+| --- | --- |
+| \_id (Primary Key) | String |
+| name | String |
+
+
+**roles**
+
+| Attribute | Data Type |
+| --- | --- |
+| \_id (Primary Key) | String |
+| name | String |
+
+**users**
+
+
+| Attribute | Data Type |
+| --- | --- |
+| \_id (Primary Key) | String |
+| reset_password | Boolean |
+| firstName | String |
+| lastName | String |
+| email | String |
+| username | String |
+| password | String |
+| role (References table _roles_) | String |
+
 No manual input or insertion of data is needed to install and run this application. 
 As long as your MongoDB Atlas account has a live Cluster that can connect to this back-end (see sections **2. Tools Required to Run and Install Application**,
 and **3. Installation and Configuration**) you only have to start the back-end to populate the database with the necessary data.
