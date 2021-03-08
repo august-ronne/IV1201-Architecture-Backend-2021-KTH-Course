@@ -1,6 +1,10 @@
 # IMPORTANT
 
-Download and install the front-end for this application **after** finishing this tutorial.
+1. Download and install the job application back-end for this application **after** finishing this tutorial.
+  The authentication back-end and its documentation can be found here:
+**https://github.com/ArthurWSimonsson/iv1201-applications**
+
+2. Download and install the front-end for this application **after** finishing this tutorial.
 The front-end and its documentation can be found here:
 
 **https://github.com/august-ronne/iv1201-front-end**
@@ -27,7 +31,7 @@ The application requirements and description can be found in the pdf linked belo
 
  https://github.com/august-ronne/iv1201-front-end/blob/master/application-description.pdf
 
-The application currently implements **Use Case 5.1 (Create Account)**, and **Use Case 5.2 (Login)**.
+The application currently implements **Use Case 5.1 (Create Account)**, **Use Case 5.2 (Login)**, **Use Case 5.4 (List Applications)**, and **Use Case 5.5 (Show Application)**.
 To read about these use cases in greater detail, please refer to the application description linked above.
 
 ## 2. Tools Required to Install and Run Back-end
@@ -155,9 +159,9 @@ validate incoming requests.
 ### Database
 
 As stated above in this section, the back-end uses a MongoDB Cloud Atlas Database to store its persistent data.
-The database design is illustrated in this diagram:
+The database contains these tables:
 
-<kbd><img src="/readme-images/readme-img-db-design.png" ></kbd>
+TABLES HERE
 
 No manual input or insertion of data is needed to install and run this application. 
 As long as your MongoDB Atlas account has a live Cluster that can connect to this back-end (see sections **2. Tools Required to Run and Install Application**,
