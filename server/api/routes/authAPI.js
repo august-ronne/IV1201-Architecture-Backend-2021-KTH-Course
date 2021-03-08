@@ -235,7 +235,11 @@ router.get("/auth/userstatus", async (req, res) => {
             responseHandler.sendResponse(result, res);
         }
     } catch (error) {
-        if (error.code || error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+        /* possible that this is needed:
+            if (error.code || error.name === "JsonWebTokenError" || error.name === "TokenExpiredError")
+           but I don't think so
+        */
+        if (error.code) {
             responseHandler.sendResponse(
                 {
                     isError: true,
