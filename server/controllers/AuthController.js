@@ -159,6 +159,7 @@ exports.loginAccount = async ({ email, password }) => {
             firstName: foundUser.firstName,
             email: foundUser.email,
             role: role
+            // token: token
         },
     };
 };

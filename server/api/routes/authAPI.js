@@ -141,6 +141,7 @@ router.post("/auth/login", async (req, res) => {
             req.body
         );
         const result = await authController.loginAccount(validatedRequest);
+        // steps below are necessary
         const { token } = result;
         res.cookie("access_token", token, {
             httpOnly: true,
@@ -207,7 +208,9 @@ router.get("/auth/logout", (req, res) => {
  * @return 500: Database error.
  */
 router.get("/auth/userstatus", async (req, res) => {
+    // if (!req.body.user) responseHander.sendResponse(...)
     try {
+        // token = req.body.user.token;
         const token = req.cookies["access_token"];
         if (!token) {
             responseHandler.sendResponse(
