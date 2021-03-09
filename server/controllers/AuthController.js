@@ -14,7 +14,7 @@ const roleDAO = require("../integration/roleDAO");
 exports.logoutAccount = async () => {};
 
 /**
- * Controller functions which deletes a user from the database.
+ * Private controller functions which deletes a user from the database.
  * @param userID ID of user that should be deleted
  * 
  * @return Object with relevant information 
@@ -55,7 +55,7 @@ exports.recoverAccount = async ({ email }) => {
         throw {
             isError: false,
             msgBody: "error.recover",
-            code: 200,
+            code: 400,
         };
     const token = tokenHandler.generateRecoverToken(foundUser._id);
     console.log("RECOVER TOKEN FOR ", email, " : ", token);
@@ -92,7 +92,8 @@ exports.setPassword = async ({ token, password }) => {
         throw {
             isError: true,
             msgBody: "error.setPassword",
-            code: 400
+            code: 400,
+            error: e
         }
     }
     

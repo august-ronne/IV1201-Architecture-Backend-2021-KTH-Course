@@ -16,15 +16,6 @@ const app = appModule.app;
 
 beforeAll(async () => {
     return await dbController.jestDB();
-    // mongoose.connect(process.env.DB_CONNECT, {
-    //     useUnifiedTopology: true,
-    //     useNewUrlParser: true,
-    // });
-    // mongoose.connection.once("open", () => {
-    //     // app.emit("mongodb_connection_ready");
-    //     console.log("Server connected to MongoDB Atlas");
-    // });
-
 });
 
 
@@ -80,6 +71,86 @@ describe('POST Endpoints', () => {
         expect(res.statusCode).toBe(200)
     })
 
+    test('auth/userstatus without token should not authenticate', async() => {
+        let res = await request(app)
+        .post('/auth/userstatus')
+
+        expect(JSON.parse(res.text).serverMessage).toHaveProperty('isAuthenticated', false)
+    })
+
+    test('auth/userstatus with valid token should authenticate', async() => {
+        const foundUser = await userDAO.findUserByEmail(User, 'test@test.com');
+        // const role = roleDAO.getRoleById(foundUser.role)
+        const token = tokenHandler.generateToken(foundUser._id, 'applicant');
+
+        let res = await request(app)
+        .post('/auth/userstatus')
+        .send({
+            token:token
+        })
+
+        expect(JSON.parse(res.text).serverMessage).toHaveProperty('isAuthenticated', true)
+    })
+
+    test('auth/userstatus with invalid token should not authenticate', async() => {
+        let res = await request(app)
+        .post('/auth/userstatus')
+        .send({
+            token:'invalid'
+        })
+
+        expect(res.statusCode).toBe(400)
+    })
+
+    test('auth/recover should fail with invalid email', async() => {
+        let res = await request(app)
+        .post('/auth/recover')
+        .send({
+            email:'invalid'
+        })
+        let result = JSON.parse(res.text)
+        expect(result.serverMessage.code).toBe(400)
+    })
+
+    test('auth/recover should respond with a token with valid input', async() => {
+        let res = await request(app)
+        .post('/auth/recover')
+        .send({
+            email:'hello1213@gmail.com'
+        })
+
+        let result = JSON.parse(res.text)
+        expect(result.serverMessage.recoveryToken).toBeDefined()
+    })
+
+
+    
+    test('/auth/setpassword should fail with invalid input', async() => {
+        let res = await request(app)
+        .post('/auth/setpassword')
+        .send({
+            input:'invalid'
+        })
+
+        expect(res.statusCode).toBe(400)
+    })
+
+    test('/auth/setpassword should succeed with valid input', async() => {
+        const foundUser = await userDAO.findUserByEmail(User, 'aaaaaa@kth.se');
+        const token = tokenHandler.generateRecoverToken(foundUser._id);
+
+        let res = await request(app)
+        .post('/auth/setpassword')
+        .send({
+           token: token,
+           password: 'new123'
+        })
+
+        expect(res.statusCode).toBe(200)
+    })
+
+    // exports.setPassword = async ({ token, password })
+
 })
 
 describe('GET Endpoints', () => {
@@ -88,34 +159,5 @@ describe('GET Endpoints', () => {
         .get('/auth/logout')
 
         expect(res.statusCode).toBe(200)
-    })
-
-    test('auth/userstatus without cookie should not authenticate', async() => {
-        let res = await request(app)
-        .get('/auth/userstatus')
-
-        expect(JSON.parse(res.text).serverMessage).toHaveProperty('isAuthenticated', false)
-    })
-
-    test('auth/userstatus with valid cookie should authenticate', async() => {
-        const foundUser = await userDAO.findUserByEmail(User, 'test@test.com');
-        // const role = roleDAO.getRoleById(foundUser.role)
-        const token = tokenHandler.generateToken(foundUser._id, 'applicant');
-
-        let res = await request(app)
-        .get('/auth/userstatus')
-        .set('Cookie', `access_token=${token}`)
-
-        console.log(res.text)
-
-        expect(JSON.parse(res.text).serverMessage).toHaveProperty('isAuthenticated', true)
-    })
-
-    test('auth/userstatus with invalid cookie should not authenticate', async() => {
-        let res = await request(app)
-        .get('/auth/userstatus')
-        .set('Cookie', "access_token=wrong")
-
-        expect(res.statusCode).toBe(400)
     })
 })

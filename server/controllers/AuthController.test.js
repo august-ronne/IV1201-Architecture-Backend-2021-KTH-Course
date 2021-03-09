@@ -1,4 +1,4 @@
-const {registerAccount, loginAccount, getUser, logoutAccount, deleteAccount, checkUserAuthenticationStatus} = require("./AuthController");
+const {setPassword, recoverAccount, registerAccount, loginAccount, getUser, logoutAccount, deleteAccount, checkUserAuthenticationStatus} = require("./AuthController");
 const dbController = require("./DBController");
 const userDAO = require("../integration/userDAO");
 const mongoose = require("mongoose");
@@ -13,14 +13,6 @@ const account_new = { firstName: "jest", lastName: "test", email: "jest.test1@ma
 
 beforeAll(async () => {
     return await dbController.jestDB();
-    // mongoose.connect(process.env.DB_CONNECT, {
-    //     useUnifiedTopology: true,
-    //     useNewUrlParser: true,
-    // });
-    // mongoose.connection.once("open", () => {
-    //     // app.emit("mongodb_connection_ready");
-    //     console.log("Server connected to MongoDB Atlas");
-    // });
 });
 
 
@@ -92,7 +84,7 @@ describe('getUser', () => {
 })
 
 describe('Authenticate', () => {
-    test('Invalid query', async () => {
+    test('should fail with invalid input', async () => {
         try {
             checkUserAuthenticationStatus({object: false})
         }
@@ -100,14 +92,28 @@ describe('Authenticate', () => {
             expect(error).toHaveProperty("accepted",false)
         }
     })
+})
 
-    // test('valid query', async() => {
-    //     const foundUser = await userDAO.findUserByEmail(User, 'jest.test@mail.com');
-    //     user = {}
-    //     let result = await checkUserAuthenticationStatus({user: {id: foundUser._id}})
+describe('Recover account', () => {
+    test('should fail with invalid input', async () => {
+        try {
+            recoverAccount({object: 'invalid'})
+        }
+        catch(error) {
+            expect(error).toHaveProperty("accepted",false)
+        }
+    })
+})
 
-    //     expect(result).toHaveProperty('isAuthenticated', true)
-    // })
+describe('Set password', () => {
+    test('should fail with invalid input', async() => {
+        try {
+            setPassword({object: 'invalid'})
+        }
+        catch(error) {
+            expect(error).toHaveProperty("accepted",false)
+        }
+    })
 })
 
 

@@ -234,7 +234,7 @@ router.post("/auth/userstatus", async (req, res) => {
             if (error.code || error.name === "JsonWebTokenError" || error.name === "TokenExpiredError")
            but I don't think so
         */
-        if (error.code) {
+        if (error.code || error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
             responseHandler.sendResponse(
                 {
                     isError: true,
@@ -256,7 +256,7 @@ router.post("/auth/userstatus", async (req, res) => {
 });
 
 /**
- * Route for upgrading a user to recruiter.
+ * Private route for upgrading a user to recruiter.
  * 
  * @param {String} endpoint url endpoint.
  * @param req Express request object.
@@ -296,7 +296,7 @@ router.post("/auth/upgrade", async (req,res) => {
 
 
 /**
- * Route for querying user from database.
+ * Private route for querying user from database.
  *
  * @param {String} endpoint url endpoint.
  * @param authenticate middleware handling authentication.
@@ -324,7 +324,7 @@ router.get("/auth/user", authenticate, async (req, res) => {
 });
 
 /**
- * Route for querying user to see if authenticated.
+ * Private route for querying user to see if authenticated.
  *
  * @param {String} endpoint url endpoint.
  * @param authenticate middleware handling authentication.
